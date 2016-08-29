@@ -170,7 +170,9 @@ public class ServerMain {
 				kafkaAppender.setName("kafka-appender");
 				kafkaAppender.clearAllFilters();
 				kafkaAppender.start();
+				// Until AIRAVATA-2073 use for airavata and zookeeper, add others if required
 				((LoggerContext) iLoggerFactory).getLogger("org.apache.airavata").addAppender(kafkaAppender);
+				((LoggerContext) iLoggerFactory).getLogger("org.apache.zookeeper").addAppender(kafkaAppender);
 			} else {
 				logger.warn("Kafka logging is enabled but cannot find logback LoggerContext, found", iLoggerFactory.getClass().toString());
 			}

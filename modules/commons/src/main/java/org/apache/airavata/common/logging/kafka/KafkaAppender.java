@@ -63,16 +63,15 @@ public class KafkaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         this.kafkaTopic = getKafkaTopicPrefix(kafkaTopicPrefix);
-
         logger.info("Starting kafka producer: bootstrap-server:{}, topic : {}", kafkaHost, this.kafkaTopic);
         this.producer = new KafkaProducer<>(props);
         if(ServerSettings.isRunningOnAws()) {
             final AwsMetadata awsMetadata = new AwsMetadata();
             serverId = new ServerId(awsMetadata.getId(), awsMetadata.getHostname(),
-                    BuildConstant.getGitDescribeVersion(), ServerSettings.getServerRoles());
+                    BuildConstant.VERSION, ServerSettings.getServerRoles());
         } else {
             serverId = new ServerId(ServerSettings.getIp(), ServerSettings.getIp(),
-                    BuildConstant.getGitDescribeVersion(), ServerSettings.getServerRoles());
+                    BuildConstant.VERSION, ServerSettings.getServerRoles());
         }
     }
 
@@ -92,7 +91,6 @@ public class KafkaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
                     : new LogEntry(serverId, event.getMessage(), Instant.ofEpochMilli(event.getTimeStamp()).toString(),
                     event.getLevel().toString(), event.getLoggerName(), event.getMDCPropertyMap(),
                     event.getThreadName() != null ? event.getThreadName() : null);
-
             producer.send(new ProducerRecord<>(kafkaTopic, new Gson().toJson(entry)));
         }
     }

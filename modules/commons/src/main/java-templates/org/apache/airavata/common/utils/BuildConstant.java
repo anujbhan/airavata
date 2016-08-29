@@ -18,11 +18,9 @@
  * under the License.
  *
  */
+
 package org.apache.airavata.common.utils;
 
 public class BuildConstant {
-    public static final String GIT_DESCRIBE_VERSION = "airavata-0.16-128-g415e9b7";
-    public static String getGitDescribeVersion() {
-        return GIT_DESCRIBE_VERSION;
-    }
+    public static final String VERSION = "${git-describe}";
 }
