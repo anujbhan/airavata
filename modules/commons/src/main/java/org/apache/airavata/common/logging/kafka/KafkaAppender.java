@@ -51,20 +51,20 @@ public class KafkaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     private  ServerId serverId = null;
 
-    public KafkaAppender(String kafkaTopicPrefix, String kafkaHost) {
+    public KafkaAppender(String kafkaHost, String kafkaTopicPrefix) {
         Properties props = new Properties();
         props.put("bootstrap.servers", kafkaHost);
         props.put("acks", "0");
         props.put("retries", 0);
         props.put("batch.size", 16384);
-        props.put("linger.ms", 10000); // Send the batch every 5 seconds
+        props.put("linger.ms", 10000); // Send the batch every 10 seconds
         props.put("buffer.memory", 33554432);
         props.put("producer.type", "async");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         this.kafkaTopic = getKafkaTopicPrefix(kafkaTopicPrefix);
 
-        logger.info("Starting kafka producer: bootstrap-server:{}, topic : {}", kafkaHost, kafkaTopic);
+        logger.info("Starting kafka producer: bootstrap-server:{}, topic : {}", kafkaHost, this.kafkaTopic);
         this.producer = new KafkaProducer<>(props);
         if(ServerSettings.isRunningOnAws()) {
             final AwsMetadata awsMetadata = new AwsMetadata();
@@ -78,6 +78,7 @@ public class KafkaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     @Override
     protected void append(ILoggingEvent event) {
+        event.prepareForDeferredProcessing();
         //todo do more elegant streaming approach to publish logs
         if (!event.getLevel().equals(Level.ALL) &&         // OFF AND ALL are not loggable levels
                 !event.getLevel().equals(Level.OFF)) {
@@ -103,6 +104,11 @@ public class KafkaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     private String getKafkaTopicPrefix(String kafkaTopicPrefix) {
         final StringBuilder stringBuffer = new StringBuilder("");
+        final String[] serverRoles = ServerSettings.getServerRoles();
+        if (serverRoles.length == 4) {
+            return kafkaTopicPrefix + "_all";
+        }
+
         for (String role : ServerSettings.getServerRoles()) {
             stringBuffer.append("_");
             stringBuffer.append(role);

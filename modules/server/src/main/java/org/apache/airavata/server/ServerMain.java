@@ -170,7 +170,9 @@ public class ServerMain {
 				kafkaAppender.setName("kafka-appender");
 				kafkaAppender.clearAllFilters();
 				kafkaAppender.start();
-				((LoggerContext) iLoggerFactory).getLogger(Logger.ROOT_LOGGER_NAME).addAppender(kafkaAppender);
+				((LoggerContext) iLoggerFactory).getLogger("org.apache.airavata").addAppender(kafkaAppender);
+			} else {
+				logger.warn("Kafka logging is enabled but cannot find logback LoggerContext, found", iLoggerFactory.getClass().toString());
 			}
 		}
 
