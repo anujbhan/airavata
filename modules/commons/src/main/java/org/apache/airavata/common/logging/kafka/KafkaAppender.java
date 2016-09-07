@@ -62,7 +62,7 @@ public class KafkaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         props.put("producer.type", "async");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        this.kafkaTopic = getKafkaTopicPrefix(kafkaTopicPrefix);
+        this.kafkaTopic = getKafkaTopic(kafkaTopicPrefix);
         logger.info("Starting kafka producer: bootstrap-server:{}, topic : {}", kafkaHost, this.kafkaTopic);
         this.producer = new KafkaProducer<>(props);
         if(ServerSettings.isRunningOnAws()) {
@@ -100,16 +100,18 @@ public class KafkaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         return Arrays.stream(stackTraceElement).map(StackTraceElementProxy::getSTEAsString).toArray(String[]::new);
     }
 
-    private String getKafkaTopicPrefix(String kafkaTopicPrefix) {
+    private String getKafkaTopic(String kafkaTopicPrefix) {
         final StringBuilder stringBuffer = new StringBuilder("");
         final String[] serverRoles = ServerSettings.getServerRoles();
         if (serverRoles.length == 4) {
             return kafkaTopicPrefix + "_all";
         }
-
         for (String role : ServerSettings.getServerRoles()) {
             stringBuffer.append("_");
             stringBuffer.append(role);
+            stringBuffer.append("_logs");
+            // do not support multiple roles yet, topic name will become complex
+            break;
         }
         return kafkaTopicPrefix + stringBuffer.toString();
     }
