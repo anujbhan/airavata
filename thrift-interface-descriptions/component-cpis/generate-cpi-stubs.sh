@@ -73,6 +73,9 @@ GFAC_SRC_DIR='../../modules/gfac/gfac-client/src/main/java/'
 REGISTRY_THRIFT_FILE='registry-api.thrift'
 REGISTRY_SRC_DIR='../../modules/registry/registry-server/registry-api-stubs/src/main/java/'
 
+RESOURCE_MGMT_THRIFT_FILE='resource-management-cpi.thrift'
+RESOURCE_MGMT_SRC_DIR='../../modules/resource-management/resource-management-stubs/src/main/java/'
+
 # Initialize the thrift arguments.
 #  Since most of the Airavata API and Data Models have includes, use recursive option by default.
 #  Generate all the files in target directory
@@ -176,6 +179,7 @@ do
             generate_thrift_stubs ${ORCHESTRATOR_THRIFT_FILE} ${ORCHESTRATOR_SRC_DIR}
             generate_thrift_stubs ${GFAC_THRIFT_FILE} ${GFAC_SRC_DIR}
             generate_thrift_stubs ${REGISTRY_THRIFT_FILE} ${REGISTRY_SRC_DIR}
+            generate_thrift_stubs ${RESOURCE_MGMT_THRIFT_FILE} ${RESOURCE_MGMT_SRC_DIR}
             ;;
     cs)   echo "Generating Credential Store Stubs"
             generate_thrift_stubs ${CS_THRIFT_FILE} ${CS_SRC_DIR}
@@ -188,6 +192,9 @@ do
             ;;
     registry)    echo "Generate Registry Stubs"
             generate_thrift_stubs ${REGISTRY_THRIFT_FILE} ${REGISTRY_SRC_DIR}
+            ;;
+    resourceMgmt)    echo "Generate Resource Management Stubs"
+            generate_thrift_stubs ${RESOURCE_MGMT_THRIFT_FILE} ${RESOURCE_MGMT_SRC_DIR}
             ;;
     *)      echo "Invalid or unsupported option"
     	    show_usage

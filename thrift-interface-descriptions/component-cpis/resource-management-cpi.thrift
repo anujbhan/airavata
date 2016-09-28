@@ -26,7 +26,7 @@
 namespace java org.apache.airavata.resource.management.cpi
 
 
-service ResourceManagement {
+service ResourceManagementService {
 
     /**
      * @param gatewayId : For identifying the Gateway
