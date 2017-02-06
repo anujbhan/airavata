@@ -1,4 +1,4 @@
-package org.apache.airavata.allocation.manager.server;
+package org.apache.airavata.allocation.manager.service.server;
 
 /*
  *
@@ -22,7 +22,9 @@ package org.apache.airavata.allocation.manager.server;
  */
 
 import org.apache.airavata.allocation.manager.cpi.AllocationManagerService;
-import org.apache.airavata.allocation.manager.handler.AllocationManagerServerHandler;
+import org.apache.airavata.allocation.manager.service.handler.AllocationManagerServerHandler;
+import org.apache.airavata.common.utils.IServer;
+import org.apache.airavata.common.utils.ServerSettings;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.transport.TServerSocket;
@@ -33,34 +35,36 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 
-public class AllocationManagerServer {
+public class AllocationManagerServer implements IServer {
 
     private final static Logger logger = LoggerFactory.getLogger(AllocationManagerServer.class);
-    private static final String SERVER_NAME = "Resource Management Server";
+    private static final String SERVER_NAME = "Allocation Manager Server";
     private static final String SERVER_VERSION = "1.0";
 
+    private IServer.ServerStatus status;
+    private TServer server;
 
+    public AllocationManagerServer() {
+        setStatus(IServer.ServerStatus.STOPPED);
+    }
+
+    @Override
     public String getName() {
         return SERVER_NAME;
     }
 
-
+    @Override
     public String getVersion() {
         return SERVER_VERSION;
     }
 
-    public static AllocationManagerServerHandler handler;
-
-    public static AllocationManagerService.Processor processor;
-
-    private TServer server;
-
+    @Override
     public void start() throws Exception {
         try {
-
-            final int serverPort = 9090;
-            final String serverHost = "localhost";
-            AllocationManagerService.Processor processor = new AllocationManagerService.Processor(handler);
+            setStatus(ServerStatus.STARTING);
+            final int serverPort = Integer.parseInt(ServerSettings.getAllocationManagerServerPort());
+            final String serverHost = ServerSettings.getAllocationManagerServerHost();
+            AllocationManagerService.Processor processor = new AllocationManagerService.Processor(new AllocationManagerServerHandler());
 
             TServerTransport serverTransport;
 
@@ -77,6 +81,7 @@ public class AllocationManagerServer {
             new Thread() {
                 public void run() {
                     server.serve();
+                    setStatus(ServerStatus.STOPPED);
                     logger.info("Allocation Manager Server Stopped.");
                 }
             }.start();
@@ -90,24 +95,61 @@ public class AllocationManagerServer {
                         }
                     }
                     if (server.isServing()) {
-                        logger.info("Starting Allocation Manager Server on Port " + serverPort);
-                        logger.info("Listening to Resource Management clients ....");
+                        setStatus(ServerStatus.STARTED);
+                        logger.info("Starting Allocation manager Server on Port " + serverPort);
+                        logger.info("Listening to Allocation manager clients ....");
                     }
                 }
             }.start();
         } catch (TTransportException e) {
-            throw new Exception("Error while starting the Alocation Manager service", e);
+            setStatus(ServerStatus.FAILED);
+            throw new Exception("Error while starting the Allocation manager service", e);
         }
     }
 
-
-
-    public static void main(String [] args) {
+    public static void main(String[] args) {
         try {
             new AllocationManagerServer().start();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void stop() throws Exception {
+        if (server!=null && server.isServing()){
+            setStatus(ServerStatus.STOPING);
+            server.stop();
+        }
+    }
+
+    @Override
+    public void restart() throws Exception {
+        stop();
+        start();
+    }
+
+    @Override
+    public void configure() throws Exception {
+
+    }
+
+    @Override
+    public ServerStatus getStatus() throws Exception {
+        return status;
+    }
+
+    private void setStatus(IServer.ServerStatus stat){
+        status=stat;
+        status.updateTime();
+    }
+
+    public TServer getServer() {
+        return server;
+    }
+
+    public void setServer(TServer server) {
+        this.server = server;
     }
 
 }

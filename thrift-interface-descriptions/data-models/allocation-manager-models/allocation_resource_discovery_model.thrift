@@ -18,19 +18,25 @@
  *
  */
 
-/*
- * Component Programming Interface definition for Apache Airavata Resource Allocation Service.
- *
-*/
+namespace java org.apache.airavata.model.allocation
+namespace php Airavata.Model.Allocation
+namespace cpp apache.airavata.model.allocation
+namespace py apache.airavata.model.allocation
 
-namespace java org.apache.airavata.allocation.manager.cpi
+include "../resource-catalog-models/compute_resource_model.thrift"
 
-include "../data-models/allocation-manager-models/allocation_resource_discovery_model.thrift"
-include "allocation_manager_cpi_errors.thrift"
+/* Resource Discovery data model
+*
+*   usage: To identify the resources available for allocation.
+*
+*   @param resourceID : unique identifier for resource
+*
+*   @param hostname : linked to ComputeResourceDescription hostname
+*
+*   @param resourceDescription : linked to ComputeResourceDescription resourceDescription */
 
-
-service AllocationManagerService {
-
-    list<allocation_resource_discovery_model.ResourceDiscovery> getAllocableResourcesForUser(1: required string userID,
-                                                                                    2: required string gatewayID) throws (1: allocation_manager_cpi_errors.AllocationManagerServiceException ex)
+struct ResourceDiscovery {
+    1: required string resourceID,
+    2: required string hostName,
+    3: optional string resourceDescription
 }

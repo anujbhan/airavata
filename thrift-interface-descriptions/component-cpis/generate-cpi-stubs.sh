@@ -167,6 +167,8 @@ generate_thrift_stubs() {
     # Compare the newly generated classes with existing java generated skelton/stub sources and replace the changed ones.
     copy_changed_files ${JAVA_GEN_DIR} ${COMPONENT_SRC_DIR}
 
+    rm -rf ${BASE_TARGET_DIR}
+
     echo "Successfully generated new sources, compared against exiting code and replaced the changed files"
 
 }
@@ -179,6 +181,7 @@ do
             generate_thrift_stubs ${ORCHESTRATOR_THRIFT_FILE} ${ORCHESTRATOR_SRC_DIR}
             generate_thrift_stubs ${GFAC_THRIFT_FILE} ${GFAC_SRC_DIR}
             generate_thrift_stubs ${REGISTRY_THRIFT_FILE} ${REGISTRY_SRC_DIR}
+            generate_thrift_stubs ${ALLOCATION_MGR_THRIFT_FILE} ${ALLOCATION_MGR_SRC_DIR}
             ;;
     cs)   echo "Generating Credential Store Stubs"
             generate_thrift_stubs ${CS_THRIFT_FILE} ${CS_SRC_DIR}

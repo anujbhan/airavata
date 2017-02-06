@@ -195,6 +195,8 @@ generate_java_stubs() {
     #  Only copying the API related classes and avoiding copy of any data models which already exist in the data-models.
     copy_changed_files ${JAVA_GEN_DIR}/org/apache/airavata/api ${JAVA_API_SDK_DIR}/org/apache/airavata/api
 
+    rm -rf ${BASE_TARGET_DIR}
+
     echo "Successfully generated new java sources, compared against exiting code and replaced the changed files"
 }
 

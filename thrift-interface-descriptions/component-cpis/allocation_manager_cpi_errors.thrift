@@ -19,18 +19,13 @@
  */
 
 /*
- * Component Programming Interface definition for Apache Airavata Resource Allocation Service.
- *
+* This file describes the definitions of the Error Messages that can occur
+*  when invoking Apache Airavata Services through the API. In addition Thrift provides
+*  built in funcationality to raise TApplicationException for all internal server errors.
 */
 
-namespace java org.apache.airavata.allocation.manager.cpi
+namespace java org.apache.airavata.allocation.manager.cpi.exception
 
-include "../data-models/allocation-manager-models/allocation_resource_discovery_model.thrift"
-include "allocation_manager_cpi_errors.thrift"
-
-
-service AllocationManagerService {
-
-    list<allocation_resource_discovery_model.ResourceDiscovery> getAllocableResourcesForUser(1: required string userID,
-                                                                                    2: required string gatewayID) throws (1: allocation_manager_cpi_errors.AllocationManagerServiceException ex)
+exception AllocationManagerServiceException {
+  1: required string message
 }

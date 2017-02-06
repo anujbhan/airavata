@@ -116,6 +116,28 @@ public class ServerSettings extends ApplicationSettings {
     private static final String KAFKA_TOPIC_PREFIX = "kafka.topic.prefix";
     private static final String SERVER_ROLES = "server.roles";
 
+    // Allocation manager configuration
+    private static final String ALLOCATION_MANAGER_SERVER = "amserver";
+    private static final String ALLOCATION_MANAGER_SERVER_NAME = "amserver.server.name";
+    private static final String ALLOCATION_MANAGER_SERVER_HOST = "amserver.server.host";
+    private static final String ALLOCATION_MANAGER_SERVER_PORT = "amserver.server.port";
+
+    public static String getAllocationManagerServer() {
+        return ALLOCATION_MANAGER_SERVER;
+    }
+
+    public static String getAllocationManagerServerName() {
+        return ALLOCATION_MANAGER_SERVER_NAME;
+    }
+
+    public static String getAllocationManagerServerHost() {
+        return ALLOCATION_MANAGER_SERVER_HOST;
+    }
+
+    public static String getAllocationManagerServerPort() {
+        return ALLOCATION_MANAGER_SERVER_PORT;
+    }
+
     // todo until AIRAVATA-2066 is finished, keep server side list configurations here.
     private static Map<String, String[]> listConfigurations = new HashMap<>();
 
