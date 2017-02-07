@@ -39,13 +39,15 @@ package org.apache.airavata.gfac.core;/*
  */
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class GroovyMap extends HashMap<String, Object> {
 
 
     public GroovyMap() {
         super();
-        addDefaultValues(); // to mitigate groovy exception groovy.lang.MissingPropertyException: No such property: <name> for class: groovy.lang.Binding
+        // to mitigate groovy exception groovy.lang.MissingPropertyException: No such property: <name> for class: groovy.lang.Binding
+        addDefaultValues();
     }
 
     public GroovyMap add(Script name, Object value){
@@ -60,6 +62,17 @@ public class GroovyMap extends HashMap<String, Object> {
 
     public Object get(Script script) {
         return get(script.name);
+    }
+
+    public Optional<String> getStringValue(Script script) {
+        Object obj = get(script);
+        if (obj instanceof String) {
+            return Optional.of((String) obj);
+        } else if (obj == null) {
+            return Optional.empty();
+        } else {
+            throw new IllegalArgumentException("Value is not String type");
+        }
     }
 
     private void addDefaultValues() {
@@ -77,6 +90,7 @@ public class GroovyMap extends HashMap<String, Object> {
                 .add(Script.RESERVATION, null)
                 .add(Script.EXPORTS, null)
                 .add(Script.MODULE_COMMANDS, null)
+                .add(Script.SCRATCH_LOCATION, null)
                 .add(Script.WORKING_DIR, null)
                 .add(Script.PRE_JOB_COMMANDS, null)
                 .add(Script.JOB_SUBMITTER_COMMAND, null)
@@ -88,7 +102,10 @@ public class GroovyMap extends HashMap<String, Object> {
                 .add(Script.CHASSIS_NAME, null)
                 .add(Script.INPUT_DIR, null)
                 .add(Script.OUTPUT_DIR, null)
-                .add(Script.USER_NAME, null);
+                .add(Script.USER_NAME, null)
+                .add(Script.GATEWAY_ID, null)
+                .add(Script.GATEWAY_USER_NAME, null)
+                .add(Script.APPLICATION_NAME, null);
     }
 
 }

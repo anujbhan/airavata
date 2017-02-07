@@ -34,6 +34,7 @@ include "replica-catalog-models/replica_catalog_models.thrift"
 include "user-group-models/user_profile_model.thrift"
 include "user-group-models/group_manager_model.thrift"
 include "allocation-manager-models/allocation_resource_discovery_model.thrift"
+include "credential-store-models/credential_store_data_models.thrift"
 
 namespace java org.apache.airavata.model
 namespace php Airavata.Model

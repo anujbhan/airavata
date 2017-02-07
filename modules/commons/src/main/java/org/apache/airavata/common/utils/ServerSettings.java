@@ -64,11 +64,19 @@ public class ServerSettings extends ApplicationSettings {
     public static final String ZOOKEEPER_SERVER_CONNECTION = "zookeeper.server.connection";
     public static final String ZOOKEEPER_TIMEOUT = "zookeeper.timeout";
 
+    // Aurora Scheduler Constants
+    public static final String AURORA_SCHEDULER_HOSTS = "aurora.scheduler.hosts";
+	public static final String AURORA_EXECUTOR_NAME = "aurora.executor.name";
+	public static final String MESOS_CLUSTER_NAME = "mesos.cluster.name";
+	public static final String AURORA_SCHEDULER_CONNECT_TIMEOUT_MS = "aurora.scheduler.timeoutms";
+	public static final String AURORA_EXECUTOR_CONFIG_TEMPLATE_FILE = "aurora.executor.config.template.filename";
 
     private static final String CREDENTIAL_STORE_DB_URL = "credential.store.jdbc.url";
     private static final String CREDENTIAL_STORE_DB_USER = "credential.store.jdbc.user";
     private static final String CREDENTIAL_STORE_DB_PASSWORD = "credential.store.jdbc.password";
     private static final String CREDENTIAL_STORE_DB_DRIVER = "credential.store.jdbc.driver";
+    private static final java.lang.String SHARING_REGISTRY_PORT = "sharing.registry.server.port";
+    private static final java.lang.String SHARING_REGISTRY_HOST = "sharing.registry.server.host";
 
     private static String USER_PROFILE_MONGODB_HOST = "userprofile.mongodb.host";
     private static String USER_PROFILE_MONGODB_PORT = "userprofile.mongodb.port";
@@ -116,6 +124,7 @@ public class ServerSettings extends ApplicationSettings {
     private static final String KAFKA_TOPIC_PREFIX = "kafka.topic.prefix";
     private static final String SERVER_ROLES = "server.roles";
 
+
     // Allocation manager configuration
     private static final String ALLOCATION_MANAGER_SERVER = "amserver";
     private static final String ALLOCATION_MANAGER_SERVER_NAME = "amserver.server.name";
@@ -137,6 +146,15 @@ public class ServerSettings extends ApplicationSettings {
     public static String getAllocationManagerServerPort() {
         return ALLOCATION_MANAGER_SERVER_PORT;
     }
+
+    //User Profile onstants
+
+    public static final String USER_PROFILE_SERVER_HOST = "user.profile.server.host";
+    public static final String USER_PROFILE_SERVER_PORT = "user.profile.server.port";
+
+    /* Caching */
+    private static final String SESSION_CACHE_ACCESS_TIME_OUT = "ssh.session.cache.access.timeout";
+
 
     // todo until AIRAVATA-2066 is finished, keep server side list configurations here.
     private static Map<String, String[]> listConfigurations = new HashMap<>();
@@ -460,5 +478,37 @@ public class ServerSettings extends ApplicationSettings {
 
     public static String[] getServerRoles() {
         return listConfigurations.get(SERVER_ROLES);
+    }
+    
+    public static String getAuroraSchedulerHosts() throws ApplicationSettingsException {
+    	return getSetting(AURORA_SCHEDULER_HOSTS);
+    }
+    
+    public static String getMesosClusterName() throws ApplicationSettingsException {
+    	return getSetting(MESOS_CLUSTER_NAME);
+    }
+    
+    public static String getAuroraExecutorName() throws ApplicationSettingsException {
+    	return getSetting(AURORA_EXECUTOR_NAME);
+    }
+    
+    public static String getAuroraExecutorConfigTemplateFileName() throws ApplicationSettingsException {
+    	return getSetting(AURORA_EXECUTOR_CONFIG_TEMPLATE_FILE);
+    }
+    
+    public static int getAuroraSchedulerTimeout() throws ApplicationSettingsException {
+    	return Integer.valueOf(getSetting(AURORA_SCHEDULER_CONNECT_TIMEOUT_MS));
+    }
+
+    public static int getSessionCacheAccessTimeout() {
+        return Integer.valueOf(getSetting(SESSION_CACHE_ACCESS_TIME_OUT, "30"));
+    }
+
+    public static String getSharingRegistryPort() {
+        return getSetting(SHARING_REGISTRY_PORT, "7878");
+    }
+
+    public static String getSharingRegistryHost() {
+        return getSetting(SHARING_REGISTRY_HOST, "localhost");
     }
 }

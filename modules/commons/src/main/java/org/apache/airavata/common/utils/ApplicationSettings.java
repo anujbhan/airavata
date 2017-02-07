@@ -405,6 +405,22 @@ public class ApplicationSettings {
         return getSetting("regserver.server.host");
     }
 
+    public static String getSuperTenantGatewayId() throws ApplicationSettingsException {
+        return getSetting("super.tenant.gatewayId");
+    }
+
+    public static String getClusterStatusMonitoringRepatTime() throws ApplicationSettingsException {
+        return getSetting("cluster.status.monitoring.repeat.time");
+    }
+
+    public static String getUserProfileServerHost() throws ApplicationSettingsException {
+        return getSetting(ServerSettings.USER_PROFILE_SERVER_HOST);
+    }
+
+    public static String getUserProfileServerPort() throws ApplicationSettingsException {
+        return getSetting(ServerSettings.USER_PROFILE_SERVER_PORT);
+    }
+
     /**
      * @deprecated use {{@link #getSetting(String)}}
      * @return

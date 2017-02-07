@@ -35,6 +35,7 @@ import org.apache.airavata.model.scheduling.ComputationalResourceSchedulingModel
 import org.apache.airavata.model.status.*;
 import org.apache.airavata.model.task.TaskModel;
 import org.apache.airavata.registry.core.experiment.catalog.ExpCatResourceUtils;
+import org.apache.airavata.registry.core.experiment.catalog.ExperimentCatResource;
 import org.apache.airavata.registry.core.experiment.catalog.ResourceType;
 import org.apache.airavata.registry.core.experiment.catalog.resources.*;
 import org.apache.airavata.registry.core.experiment.catalog.utils.ThriftDataModelConversion;
@@ -147,6 +148,10 @@ public class ExperimentRegistry {
             configDataResource.setStaticWorkingDir(configurationData.getComputationalResourceScheduling().getStaticWorkingDir());
             configDataResource.setStorageId(configurationData.getStorageId());
             configDataResource.setExperimentDataDir(configurationData.getExperimentDataDir());
+            configDataResource.setUseUserCRPref(configurationData.isUseUserCRPref());
+            configDataResource.setOverrideLoginUserName(configurationData.getComputationalResourceScheduling().getOverrideLoginUserName());
+            configDataResource.setOverrideScratchLocation(configurationData.getComputationalResourceScheduling().getOverrideScratchLocation());
+            configDataResource.setOverrideAllocationProjectNumber(configurationData.getComputationalResourceScheduling().getOverrideAllocationProjectNumber());
             configDataResource.save();
         } catch (Exception e) {
             logger.error("Unable to save user config data", e);
@@ -282,6 +287,7 @@ public class ExperimentRegistry {
             processResource.setGenerateCert(process.isGenerateCert());
             processResource.setExperimentDataDir(process.getExperimentDataDir());
             processResource.setUserName(process.getUserName());
+            processResource.setUseUserCRPref(process.isUseUserCRPref());
             if(process.isEnableEmailNotification()){
                 processResource.setEnableEmailNotification(true);
                 if(process.getEmailAddresses() != null){
@@ -596,7 +602,15 @@ public class ExperimentRegistry {
             existingExperiment.setCreationTime(AiravataUtils.getTime(experiment.getCreationTime()));
             existingExperiment.setDescription(experiment.getDescription());
             existingExperiment.setExecutionId(experiment.getExecutionId());
-            existingExperiment.setEnableEmailNotification(experiment.isEnableEmailNotification());
+
+            if(experiment.isEnableEmailNotification()){
+                existingExperiment.setEnableEmailNotification(true);
+                if(experiment.getEmailAddresses() != null){
+                    existingExperiment.setEmailAddresses(StringUtils.join(experiment.getEmailAddresses(), ","));
+                }
+            }else{
+                existingExperiment.setEnableEmailNotification(false);
+            }
 
             existingExperiment.save();
 
@@ -720,6 +734,10 @@ public class ExperimentRegistry {
             configDataResource.setTotalPhysicalMemory(configurationData.getComputationalResourceScheduling().getTotalPhysicalMemory());
             configDataResource.setStaticWorkingDir(configurationData.getComputationalResourceScheduling().getStaticWorkingDir());
             configDataResource.setExperimentDataDir(configurationData.getExperimentDataDir());
+            configDataResource.setUseUserCRPref(configurationData.isUseUserCRPref());
+            configDataResource.setOverrideLoginUserName(configurationData.getComputationalResourceScheduling().getOverrideLoginUserName());
+            configDataResource.setOverrideScratchLocation(configurationData.getComputationalResourceScheduling().getOverrideScratchLocation());
+            configDataResource.setOverrideAllocationProjectNumber(configurationData.getComputationalResourceScheduling().getOverrideAllocationProjectNumber());
             configDataResource.save();
         } catch (Exception e) {
             logger.error("Unable to save user config data", e);
@@ -747,6 +765,7 @@ public class ExperimentRegistry {
             processResource.setGenerateCert(process.isGenerateCert());
             processResource.setExperimentDataDir(process.getExperimentDataDir());
             processResource.setUserName(process.getUserName());
+            processResource.setUseUserCRPref(process.isUseUserCRPref());
             if(process.isEnableEmailNotification()){
                 processResource.setEnableEmailNotification(true);
                 if(process.getEmailAddresses() != null){
@@ -1003,6 +1022,9 @@ public class ExperimentRegistry {
         configDataResource.setWallTimeLimit(value.getWallTimeLimit());
         configDataResource.setTotalPhysicalMemory(value.getTotalPhysicalMemory());
         configDataResource.setStaticWorkingDir(value.getStaticWorkingDir());
+        configDataResource.setOverrideLoginUserName(value.getOverrideLoginUserName());
+        configDataResource.setOverrideScratchLocation(value.getOverrideScratchLocation());
+        configDataResource.setOverrideAllocationProjectNumber(value.getOverrideAllocationProjectNumber());
         configDataResource.save();
     }
 
@@ -1071,7 +1093,7 @@ public class ExperimentRegistry {
             ExperimentResource experimentResource = new ExperimentResource();
             ProcessResource resource = experimentResource.getProcess(processId);
             if (fieldName == null) {
-                return ThriftDataModelConversion.getProcesModel(resource);
+                return ThriftDataModelConversion.getProcessModel(resource);
             } else if (fieldName.equals(Constants.FieldConstants.ProcessConstants.PROCESS_ERROR)) {
                 return ThriftDataModelConversion.getErrorModel(resource.getProcessError());
             } else if (fieldName.equals(Constants.FieldConstants.ProcessConstants.PROCESS_STATUS)) {
@@ -1211,7 +1233,7 @@ public class ExperimentRegistry {
                 experimentResource.setExperimentId((String) value);
                 List<ProcessResource> resources = experimentResource.getProcessList();
                 for (ProcessResource processResource : resources) {
-                    ProcessModel processModel = ThriftDataModelConversion.getProcesModel(processResource);
+                    ProcessModel processModel = ThriftDataModelConversion.getProcessModel(processResource);
                     processes.add(processModel);
                 }
                 return processes;
@@ -1439,7 +1461,10 @@ public class ExperimentRegistry {
             ExperimentStatisticsResource experimentStatisticsResource = workerResource.getExperimentStatistics(
                     filters.get(Constants.FieldConstants.ExperimentConstants.GATEWAY_ID),
                     new Timestamp(Long.parseLong(filters.get(Constants.FieldConstants.ExperimentConstants.FROM_DATE))),
-                    new Timestamp(Long.parseLong(filters.get(Constants.FieldConstants.ExperimentConstants.TO_DATE)))
+                    new Timestamp(Long.parseLong(filters.get(Constants.FieldConstants.ExperimentConstants.TO_DATE))),
+                    filters.get(Constants.FieldConstants.ExperimentConstants.USER_NAME),
+                    filters.get(Constants.FieldConstants.ExperimentConstants.EXECUTION_ID),
+                    filters.get(Constants.FieldConstants.ExperimentConstants.RESOURCE_HOST_ID)
             );
 
             experimentStatistics.setAllExperimentCount(experimentStatisticsResource.getAllExperimentCount());
@@ -1683,6 +1708,38 @@ public class ExperimentRegistry {
             logger.error("Error while retrieving job.....", e);
             throw new RegistryException(e);
         }
+    }
+
+    public boolean createQueueStatuses(List<QueueStatusModel> queueStatusModels) throws RegistryException {
+        for(QueueStatusModel qModel : queueStatusModels){
+            QueueStatusResource queueStatusResource = new QueueStatusResource();
+            queueStatusResource.setHostName(qModel.getHostName());
+            queueStatusResource.setQueueName(qModel.getQueueName());
+            queueStatusResource.setTime(qModel.getTime());
+            queueStatusResource.setQueueUp(qModel.isQueueUp());
+            queueStatusResource.setRunningJobs(qModel.getRunningJobs());
+            queueStatusResource.setQueuedJobs(qModel.getQueuedJobs());
+
+            queueStatusResource.save();
+        }
+        return true;
+    }
+
+    public List<QueueStatusModel> getLatestQueueStatuses() throws RegistryException {
+        List<QueueStatusModel> queueStatusModels = new ArrayList<>();
+        List<ExperimentCatResource> queueStatusResources =  (new QueueStatusResource()).get(ResourceType.QUEUE_STATUS);
+        for(ExperimentCatResource r : queueStatusResources){
+            QueueStatusResource qResource = (QueueStatusResource) r;
+            QueueStatusModel queueStatusModel = new QueueStatusModel();
+            queueStatusModel.setHostName(qResource.getHostName());
+            queueStatusModel.setQueueName(qResource.getQueueName());
+            queueStatusModel.setTime(qResource.getTime());
+            queueStatusModel.setQueueUp(qResource.getQueueUp());
+            queueStatusModel.setRunningJobs(qResource.getRunningJobs());
+            queueStatusModel.setQueuedJobs(qResource.getQueuedJobs());
+            queueStatusModels.add(queueStatusModel);
+        }
+        return queueStatusModels;
     }
 
     public String getStatusID(String parentId) {

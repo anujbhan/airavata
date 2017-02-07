@@ -23,7 +23,12 @@ import groovy.lang.Writable;
 import groovy.text.GStringTemplateEngine;
 import groovy.text.TemplateEngine;
 import org.apache.airavata.common.exception.ApplicationSettingsException;
-import org.apache.airavata.common.utils.*;
+import org.apache.airavata.common.utils.AiravataUtils;
+import org.apache.airavata.common.utils.AiravataZKUtils;
+import org.apache.airavata.common.utils.ApplicationSettings;
+import org.apache.airavata.common.utils.DBUtil;
+import org.apache.airavata.common.utils.ServerSettings;
+import org.apache.airavata.common.utils.ZkConstants;
 import org.apache.airavata.credential.store.store.CredentialReader;
 import org.apache.airavata.credential.store.store.impl.CredentialReaderImpl;
 import org.apache.airavata.gfac.core.context.ProcessContext;
@@ -31,23 +36,54 @@ import org.apache.airavata.gfac.core.context.TaskContext;
 import org.apache.airavata.messaging.core.MessageContext;
 import org.apache.airavata.model.appcatalog.appdeployment.ApplicationDeploymentDescription;
 import org.apache.airavata.model.appcatalog.appdeployment.CommandObject;
-import org.apache.airavata.model.appcatalog.computeresource.*;
+import org.apache.airavata.model.appcatalog.computeresource.CloudJobSubmission;
+import org.apache.airavata.model.appcatalog.computeresource.ComputeResourceDescription;
+import org.apache.airavata.model.appcatalog.computeresource.JobSubmissionInterface;
+import org.apache.airavata.model.appcatalog.computeresource.JobSubmissionProtocol;
+import org.apache.airavata.model.appcatalog.computeresource.LOCALSubmission;
+import org.apache.airavata.model.appcatalog.computeresource.MonitorMode;
+import org.apache.airavata.model.appcatalog.computeresource.ResourceJobManager;
+import org.apache.airavata.model.appcatalog.computeresource.ResourceJobManagerType;
+import org.apache.airavata.model.appcatalog.computeresource.SSHJobSubmission;
+import org.apache.airavata.model.appcatalog.computeresource.UnicoreJobSubmission;
 import org.apache.airavata.model.appcatalog.gatewayprofile.ComputeResourcePreference;
 import org.apache.airavata.model.application.io.DataType;
 import org.apache.airavata.model.application.io.InputDataObjectType;
 import org.apache.airavata.model.application.io.OutputDataObjectType;
 import org.apache.airavata.model.commons.ErrorModel;
-import org.apache.airavata.model.data.replica.*;
+import org.apache.airavata.model.data.replica.DataProductModel;
+import org.apache.airavata.model.data.replica.DataProductType;
+import org.apache.airavata.model.data.replica.DataReplicaLocationModel;
+import org.apache.airavata.model.data.replica.ReplicaLocationCategory;
+import org.apache.airavata.model.data.replica.ReplicaPersistentType;
 import org.apache.airavata.model.experiment.ExperimentModel;
 import org.apache.airavata.model.job.JobModel;
-import org.apache.airavata.model.messaging.event.*;
+import org.apache.airavata.model.messaging.event.JobIdentifier;
+import org.apache.airavata.model.messaging.event.JobStatusChangeEvent;
+import org.apache.airavata.model.messaging.event.MessageType;
+import org.apache.airavata.model.messaging.event.ProcessIdentifier;
+import org.apache.airavata.model.messaging.event.ProcessStatusChangeEvent;
+import org.apache.airavata.model.messaging.event.TaskIdentifier;
+import org.apache.airavata.model.messaging.event.TaskStatusChangeEvent;
 import org.apache.airavata.model.parallelism.ApplicationParallelismType;
 import org.apache.airavata.model.process.ProcessModel;
 import org.apache.airavata.model.scheduling.ComputationalResourceSchedulingModel;
-import org.apache.airavata.model.status.*;
+import org.apache.airavata.model.status.JobStatus;
+import org.apache.airavata.model.status.ProcessState;
+import org.apache.airavata.model.status.ProcessStatus;
+import org.apache.airavata.model.status.TaskState;
+import org.apache.airavata.model.status.TaskStatus;
 import org.apache.airavata.model.task.JobSubmissionTaskModel;
 import org.apache.airavata.registry.core.experiment.catalog.impl.RegistryFactory;
-import org.apache.airavata.registry.cpi.*;
+import org.apache.airavata.registry.cpi.AppCatalog;
+import org.apache.airavata.registry.cpi.AppCatalogException;
+import org.apache.airavata.registry.cpi.CompositeIdentifier;
+import org.apache.airavata.registry.cpi.ExpCatChildDataType;
+import org.apache.airavata.registry.cpi.ExperimentCatalog;
+import org.apache.airavata.registry.cpi.ExperimentCatalogModelType;
+import org.apache.airavata.registry.cpi.GwyResourceProfile;
+import org.apache.airavata.registry.cpi.RegistryException;
+import org.apache.airavata.registry.cpi.ReplicaCatalog;
 import org.apache.airavata.registry.cpi.utils.Constants;
 import org.apache.commons.io.FileUtils;
 import org.apache.curator.framework.CuratorFramework;
@@ -64,18 +100,35 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.transform.*;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.xpath.*;
-import java.io.*;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -376,6 +429,17 @@ public class GFacUtils {
         }
     }
 
+    public static CloudJobSubmission getCloudJobSubmission(String submissionId) throws RegistryException {
+        try {
+            AppCatalog appCatalog = RegistryFactory.getAppCatalog();
+            return appCatalog.getComputeResource().getCloudJobSubmission(submissionId);
+        } catch (Exception e) {
+            String errorMsg = "Error while retrieving SSH job submission with submission id : " + submissionId;
+            log.error(errorMsg, e);
+            throw new RegistryException(errorMsg, e);
+        }
+    }
+
     /**
      * To convert list to separated value
      *
@@ -416,8 +480,11 @@ public class GFacUtils {
     public static String getZKGfacServersParentPath() {
         return ZKPaths.makePath(ZkConstants.ZOOKEEPER_SERVERS_NODE, ZkConstants.ZOOKEEPER_GFAC_SERVER_NODE);
     }
-
-    public static GroovyMap creatGroovyMap(ProcessContext processContext, TaskContext taskContext)
+    public static GroovyMap crateGroovyMap(ProcessContext processContext)
+            throws ApplicationSettingsException, AppCatalogException, GFacException {
+        return createGroovyMap(processContext, null);
+    }
+    public static GroovyMap createGroovyMap(ProcessContext processContext, TaskContext taskContext)
             throws GFacException, AppCatalogException, ApplicationSettingsException {
 
         GroovyMap groovyMap = new GroovyMap();
@@ -430,12 +497,13 @@ public class GFacUtils {
         groovyMap.add(Script.EXECUTABLE_PATH, processContext.getApplicationDeploymentDescription().getExecutablePath());
         groovyMap.add(Script.STANDARD_OUT_FILE, processContext.getStdoutLocation());
         groovyMap.add(Script.STANDARD_ERROR_FILE, processContext.getStderrLocation());
+        groovyMap.add(Script.SCRATCH_LOCATION, processContext.getScratchLocation());
+        groovyMap.add(Script.GATEWAY_ID, processContext.getGatewayId());
+        groovyMap.add(Script.GATEWAY_USER_NAME, processContext.getProcessModel().getUserName());
+        groovyMap.add(Script.APPLICATION_NAME, processContext.getApplicationInterfaceDescription().getApplicationName());
 
-        ComputeResourcePreference crp = getComputeResourcePreference(processContext);
-        if (isValid(crp.getAllocationProjectNumber())) {
-            groovyMap.add(Script.ACCOUNT_STRING, crp.getAllocationProjectNumber());
-        }
-        groovyMap.add(Script.RESERVATION, getReservation(crp));
+        groovyMap.add(Script.ACCOUNT_STRING, processContext.getAllocationProjectNumber());
+        groovyMap.add(Script.RESERVATION, processContext.getReservation());
 
         // To make job name alpha numeric
         groovyMap.add(Script.JOB_NAME, "A" + String.valueOf(generateJobName()));
@@ -448,17 +516,24 @@ public class GFacUtils {
         groovyMap.add(Script.USER_NAME, processContext.getJobSubmissionRemoteCluster().getServerInfo().getUserName());
         groovyMap.add(Script.SHELL_NAME, "/bin/bash");
         // get walltime
-        try {
-            JobSubmissionTaskModel jobSubmissionTaskModel = ((JobSubmissionTaskModel) taskContext.getSubTaskModel());
-            if (jobSubmissionTaskModel.getWallTime() > 0) {
-                groovyMap.add(Script.MAX_WALL_TIME,
-                        GFacUtils.maxWallTimeCalculator(jobSubmissionTaskModel.getWallTime()));
+        if (taskContext != null) {
+            try {
+                JobSubmissionTaskModel jobSubmissionTaskModel = ((JobSubmissionTaskModel) taskContext.getSubTaskModel());
+                if (jobSubmissionTaskModel.getWallTime() > 0) {
+                    groovyMap.add(Script.MAX_WALL_TIME,
+                            GFacUtils.maxWallTimeCalculator(jobSubmissionTaskModel.getWallTime()));
+                }
+            } catch (TException e) {
+                log.error("Error while getting job submission sub task model", e);
             }
-        } catch (TException e) {
-            log.error("Error while getting job submissiont sub task model", e);
         }
 
         // NOTE: Give precedence to data comes with experiment
+        // qos per queue
+        String qoS = getQoS(processContext.getQualityOfService(), processContext.getQueueName());
+        if (qoS != null) {
+            groovyMap.add(Script.QUALITY_OF_SERVICE, qoS);
+        }
         ComputationalResourceSchedulingModel scheduling = processModel.getProcessResourceSchedule();
         if (scheduling != null) {
             int totalNodeCount = scheduling.getNodeCount();
@@ -469,11 +544,6 @@ public class GFacUtils {
             }
             if (totalNodeCount > 0) {
                 groovyMap.add(Script.NODES, totalNodeCount);
-            }
-            // qos per queue
-            String qoS = getQoS(crp.getQualityOfService(), scheduling.getQueueName());
-            if (qoS != null) {
-                groovyMap.add(Script.QUALITY_OF_SERVICE, qoS);
             }
             if (totalCPUCount > 0) {
                 int ppn = totalCPUCount / totalNodeCount;
@@ -522,7 +592,7 @@ public class GFacUtils {
         if (preJobCommands != null) {
             List<String> preJobCmdCollect = preJobCommands.stream()
                     .sorted((e1, e2) -> e1.getCommandOrder() - e2.getCommandOrder())
-                    .map(map -> map.getCommand())
+                    .map(map -> parseCommands(map.getCommand(), groovyMap))
                     .collect(Collectors.toList());
             groovyMap.add(Script.PRE_JOB_COMMANDS, preJobCmdCollect);
         }
@@ -531,15 +601,15 @@ public class GFacUtils {
         if (postJobCommands != null) {
             List<String> postJobCmdCollect = postJobCommands.stream()
                     .sorted((e1, e2) -> e1.getCommandOrder() - e2.getCommandOrder())
-                    .map(map -> map.getCommand())
+                    .map(map -> parseCommands(map.getCommand(), groovyMap))
                     .collect(Collectors.toList());
             groovyMap.add(Script.POST_JOB_COMMANDS, postJobCmdCollect);
         }
 
         ApplicationParallelismType parallelism = appDepDescription.getParallelism();
-        Map<ApplicationParallelismType, String> parallelismPrefix = processContext.getResourceJobManager().getParallelismPrefix();
         if (parallelism != null) {
             if (parallelism != ApplicationParallelismType.SERIAL) {
+                Map<ApplicationParallelismType, String> parallelismPrefix = processContext.getResourceJobManager().getParallelismPrefix();
                 if (parallelismPrefix != null){
                     String parallelismCommand = parallelismPrefix.get(parallelism);
                     if (parallelismCommand != null){
@@ -589,21 +659,6 @@ public class GFacUtils {
             log.info("Email list: " + emailIds);
             groovyMap.add(Script.MAIL_ADDRESS, emailIds);
         }
-    }
-
-    private static String getReservation(ComputeResourcePreference crp) {
-        long start = crp.getReservationStartTime();
-        long end = crp.getReservationEndTime();
-        String reservation = null;
-        if (start > 0 && start < end) {
-            long now = Calendar.getInstance().getTimeInMillis();
-            if (now > start && now < end) {
-                reservation = crp.getReservation();
-            }
-        } else {
-            reservation = crp.getReservation();
-        }
-       return reservation;
     }
 
     private static List<String> getProcessOutputValues(List<OutputDataObjectType> processOutputs) {
@@ -693,7 +748,7 @@ public class GFacUtils {
         return null;
     }
 
-    private static int generateJobName() {
+    public static int generateJobName() {
         Random random = new Random();
         int i = random.nextInt(Integer.MAX_VALUE);
         i = i + 99999999;
@@ -703,11 +758,14 @@ public class GFacUtils {
         return i;
     }
 
-    private static String parseCommand(String value, ProcessContext context) {
-        String parsedValue = value.replaceAll("\\$workingDir", context.getWorkingDir());
-        parsedValue = parsedValue.replaceAll("\\$inputDir", context.getInputDir());
-        parsedValue = parsedValue.replaceAll("\\$outputDir", context.getOutputDir());
-        return parsedValue;
+    static String parseCommands(String value, GroovyMap bindMap) {
+        TemplateEngine templateEngine = new GStringTemplateEngine();
+        try {
+            return templateEngine.createTemplate(value).make(bindMap).toString();
+        } catch (ClassNotFoundException | IOException e) {
+            throw new IllegalArgumentException("Error while parsing command " + value
+                    + " , Invalid command or incomplete bind map");
+        }
     }
 
     public static ResourceJobManager getResourceJobManager(ProcessContext processContext) {
@@ -749,12 +807,11 @@ public class GFacUtils {
         }
     }
 
-    public static JobSubmissionInterface getPreferredJobSubmissionInterface(ProcessContext context) throws AppCatalogException {
+    public static JobSubmissionInterface getPreferredJobSubmissionInterface(ProcessContext processContext) throws AppCatalogException {
         try {
-            String resourceHostId = context.getComputeResourceDescription().getComputeResourceId();
-            ComputeResourcePreference resourcePreference = context.getComputeResourcePreference();
-            JobSubmissionProtocol preferredJobSubmissionProtocol = resourcePreference.getPreferredJobSubmissionProtocol();
-            ComputeResourceDescription resourceDescription = context.getAppCatalog().getComputeResource().getComputeResource(resourceHostId);
+            String resourceHostId = processContext.getComputeResourceDescription().getComputeResourceId();
+            JobSubmissionProtocol preferredJobSubmissionProtocol = processContext.getPreferredJobSubmissionProtocol();
+            ComputeResourceDescription resourceDescription = processContext.getAppCatalog().getComputeResource().getComputeResource(resourceHostId);
             List<JobSubmissionInterface> jobSubmissionInterfaces = resourceDescription.getJobSubmissionInterfaces();
             Map<JobSubmissionProtocol, List<JobSubmissionInterface>> orderedInterfaces = new HashMap<>();
             List<JobSubmissionInterface> interfaces = new ArrayList<>();
@@ -809,38 +866,52 @@ public class GFacUtils {
         }
     }
 
-    public static ComputeResourcePreference getComputeResourcePreference(ProcessContext context) throws AppCatalogException {
-        try {
-            GwyResourceProfile gatewayProfile = context.getAppCatalog().getGatewayProfile();
-            String resourceHostId = context.getComputeResourceDescription().getComputeResourceId();
-            return gatewayProfile.getComputeResourcePreference(context.getGatewayId(), resourceHostId);
-        } catch (AppCatalogException e) {
-            log.error("Error occurred while initializing app catalog", e);
-            throw new AppCatalogException("Error occurred while initializing app catalog", e);
-        }
-    }
-
     public static File createJobFile(GroovyMap groovyMap, TaskContext tc, JobManagerConfiguration jMC)
-            throws GFacException{
-
-        URL templateUrl = ApplicationSettings.loadFile(jMC.getJobDescriptionTemplateName());
-        if (templateUrl == null) {
-            String error = "System configuration file '" + jMC.getJobDescriptionTemplateName()
-                    + "' not found in the classpath";
-            throw new GFacException(error);
-        }
+            throws GFacException {
         try {
-            File template = new File(templateUrl.getPath());
-            TemplateEngine engine = new GStringTemplateEngine();
-            Writable make = engine.createTemplate(template).make(groovyMap);
-
             int number = new SecureRandom().nextInt();
             number = (number < 0 ? -number : number);
             File tempJobFile = new File(GFacUtils.getLocalDataDir(tc), "job_" + Integer.toString(number) + jMC.getScriptExtension());
-            FileUtils.writeStringToFile(tempJobFile, make.toString());
+            FileUtils.writeStringToFile(tempJobFile, generateScript(groovyMap, jMC.getJobDescriptionTemplateName()));
             return tempJobFile;
-        } catch (ClassNotFoundException | IOException e) {
-            throw new GFacException("Error while parsing template and generating script file");
+        } catch (IOException e) {
+            throw new GFacException("Error while writing script content to temp file");
+        }
+    }
+
+    public static String generateScript(GroovyMap groovyMap, String templateName) throws GFacException {
+        URL templateUrl = ApplicationSettings.loadFile(templateName);
+        if (templateUrl == null) {
+            String error = "Template file '" + templateName + "' not found";
+            throw new GFacException(error);
+        }
+        File template = new File(templateUrl.getPath());
+        TemplateEngine engine = new GStringTemplateEngine();
+        Writable make;
+        try {
+            make = engine.createTemplate(template).make(groovyMap);
+        } catch (Exception e) {
+            throw new GFacException("Error while generating script using groovy map");
+        }
+        return make.toString();
+    }
+
+    public static String getTemplateFileName(ResourceJobManagerType resourceJobManagerType) {
+        switch (resourceJobManagerType) {
+            case FORK:
+                return "UGE_Groovy.template";
+            case PBS:
+                return "PBS_Groovy.template";
+            case SLURM:
+                return "SLURM_Groovy.template";
+            case UGE:
+                return "UGE_Groovy.template";
+            case LSF:
+                return "LSF_Groovy.template";
+            case CLOUD:
+                return "CLOUD_Groovy.template";
+            default:
+                return null;
         }
     }
 
