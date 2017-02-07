@@ -43,27 +43,28 @@ public class AllocationManagerServerHandler implements AllocationManagerService.
 
     @Override
     public List<ResourceDiscovery> getAllocableResourcesForUser(String userID, String gatewayID) throws AllocationManagerServiceException, TException {
-        List<ResourceDiscovery> discoveredResources = new ArrayList<ResourceDiscovery>();
-        try{
-            if(userID == null || gatewayID == null){
-                AllocationManagerServiceException ex = new AllocationManagerServiceException();
-                ex.setMessage("User ID or Gateway Id cannot be null");
-                throw ex;
-            }
-            RegistryService.Client regClient = getRegistryServiceClient();
-            List<ComputeResourceDescription> computeResourceDescriptionList = regClient.getAllComputeResources();
-            for(ComputeResourceDescription resourceDescription : computeResourceDescriptionList){
-                ResourceDiscovery resource = new ResourceDiscovery();
-                resource.setHostName(resourceDescription.getHostName());
-                resource.setResourceDescription(resourceDescription.getResourceDescription());
-                resource.setResourceID(resource.getResourceID());
-            }
-            return discoveredResources;
-        }catch (AllocationManagerServiceException ex){
-            throw new AllocationManagerServiceException("Resource discovery failed for user " + userID + " in gateway " + gatewayID);
-        }catch (ApplicationSettingsException ex){
-            throw new TException("Call to registry client failed ",ex);
-        }
+//        List<ResourceDiscovery> discoveredResources = new ArrayList<ResourceDiscovery>();
+//        try{
+//            if(userID == null || gatewayID == null){
+//                AllocationManagerServiceException ex = new AllocationManagerServiceException();
+//                ex.setMessage("User ID or Gateway Id cannot be null");
+//                throw ex;
+//            }
+//            RegistryService.Client regClient = getRegistryServiceClient();
+//            //List<ComputeResourceDescription> computeResourceDescriptionList = regClient.getAllComputeResources();
+//            for(ComputeResourceDescription resourceDescription : computeResourceDescriptionList){
+//                ResourceDiscovery resource = new ResourceDiscovery();
+//                resource.setHostName(resourceDescription.getHostName());
+//                resource.setResourceDescription(resourceDescription.getResourceDescription());
+//                resource.setResourceID(resource.getResourceID());
+//            }
+//            return discoveredResources;
+//        }catch (AllocationManagerServiceException ex){
+//            throw new AllocationManagerServiceException("Resource discovery failed for user " + userID + " in gateway " + gatewayID);
+//        }catch (ApplicationSettingsException ex){
+//            throw new TException("Call to registry client failed ",ex);
+//        }
+        return null;
     }
 
     private RegistryService.Client getRegistryServiceClient() throws TException, ApplicationSettingsException {
