@@ -41,7 +41,6 @@ import org.apache.airavata.model.status.*;
 import org.apache.airavata.model.task.TaskTypes;
 import org.apache.airavata.registry.cpi.AppCatalogException;
 import org.apache.airavata.registry.cpi.ExperimentCatalogModelType;
-import org.apache.airavata.registry.cpi.RegistryException;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,15 +71,16 @@ public class DefaultJobSubmissionTask implements JobSubmissionTask {
 		    JobModel jobModel = processContext.getJobModel();
 		    jobModel.setTaskId(taskContext.getTaskId());
 		    RemoteCluster remoteCluster = processContext.getJobSubmissionRemoteCluster();
-		    JobDescriptor jobDescriptor = GFacUtils.createJobDescriptor(processContext,taskContext);
-		    jobModel.setJobName(jobDescriptor.getJobName());
-		    ResourceJobManager resourceJobManager = GFacUtils.getResourceJobManager(processContext);
+			GroovyMap groovyMap = GFacUtils.createGroovyMap(processContext, taskContext);
+			groovyMap.getStringValue(Script.JOB_NAME).
+					ifPresent(jobName -> jobModel.setJobName(jobName));
+			ResourceJobManager resourceJobManager = GFacUtils.getResourceJobManager(processContext);
 		    JobManagerConfiguration jConfig = null;
 		    if (resourceJobManager != null) {
 			    jConfig = Factory.getJobManagerConfiguration(resourceJobManager);
 		    }
 		    JobStatus jobStatus = new JobStatus();
-		    File jobFile = GFacUtils.createJobFile(taskContext, jobDescriptor, jConfig);
+		    File jobFile = GFacUtils.createJobFile(groovyMap, taskContext, jConfig);
 		    if (jobFile != null && jobFile.exists()) {
 			    jobModel.setJobDescription(FileUtils.readFileToString(jobFile));
 			    JobSubmissionOutput jobSubmissionOutput = remoteCluster.submitBatchJob(jobFile.getPath(),
@@ -167,8 +167,9 @@ public class DefaultJobSubmissionTask implements JobSubmissionTask {
                     if (computeResourceDescription.isGatewayUsageReporting()){
                         String loadCommand = computeResourceDescription.getGatewayUsageModuleLoadCommand();
                         String usageExecutable = computeResourceDescription.getGatewayUsageExecutable();
-                        ExperimentModel experiment = (ExperimentModel)taskContext.getParentProcessContext().getExperimentCatalog().get(ExperimentCatalogModelType.EXPERIMENT, experimentId);
-                        String username = experiment.getUserName() + "@" + taskContext.getParentProcessContext().getComputeResourcePreference().getUsageReportingGatewayId();
+                        ExperimentModel experiment = (ExperimentModel)taskContext.getParentProcessContext()
+								.getExperimentCatalog().get(ExperimentCatalogModelType.EXPERIMENT, experimentId);
+                        String username = experiment.getUserName() + "@" + taskContext.getParentProcessContext().getUsageReportingGatewayId();
                         RawCommandInfo rawCommandInfo = new RawCommandInfo(loadCommand + " && " + usageExecutable + " -gateway_user " +  username  +
                                                                            " -submit_time \"`date '+%F %T %:z'`\"  -jobid " + jobId );
                         remoteCluster.execute(rawCommandInfo);
@@ -238,7 +239,7 @@ public class DefaultJobSubmissionTask implements JobSubmissionTask {
 		    errorModel.setActualErrorMessage(e.getMessage());
 		    errorModel.setUserFriendlyMessage(msg);
 		    taskContext.getTaskModel().setTaskErrors(Arrays.asList(errorModel));
-	    } catch (ApplicationSettingsException | GFacException e) {
+	    } catch (ApplicationSettingsException e) {
 		    String msg = "Error occurred while creating job descriptor";
 		    log.error(msg, e);
 		    taskStatus.setState(TaskState.FAILED);
@@ -248,7 +249,7 @@ public class DefaultJobSubmissionTask implements JobSubmissionTask {
 		    errorModel.setActualErrorMessage(e.getMessage());
 		    errorModel.setUserFriendlyMessage(msg);
 		    taskContext.getTaskModel().setTaskErrors(Arrays.asList(errorModel));
-	    } catch (SSHApiException e) {
+	    } catch (GFacException e) {
 		    String msg = "Error occurred while submitting the job";
 		    log.error(msg, e);
 		    taskStatus.setState(TaskState.FAILED);
@@ -278,8 +279,16 @@ public class DefaultJobSubmissionTask implements JobSubmissionTask {
 		    errorModel.setActualErrorMessage(e.getMessage());
 		    errorModel.setUserFriendlyMessage(msg);
 		    taskContext.getTaskModel().setTaskErrors(Arrays.asList(errorModel));
-	    } catch (RegistryException e) {
-            e.printStackTrace();
+		} catch (Throwable e) {
+			String msg = "JobSubmission failed";
+			log.error(msg, e);
+			taskStatus.setState(TaskState.FAILED);
+			taskStatus.setReason(msg);
+			taskStatus.setTimeOfStateChange(AiravataUtils.getCurrentTimestamp().getTime());
+			ErrorModel errorModel = new ErrorModel();
+			errorModel.setActualErrorMessage(e.getMessage());
+			errorModel.setUserFriendlyMessage(msg);
+			taskContext.getTaskModel().setTaskErrors(Arrays.asList(errorModel));
         }
 
         taskContext.setTaskStatus(taskStatus);
@@ -291,7 +300,7 @@ public class DefaultJobSubmissionTask implements JobSubmissionTask {
 	    return taskStatus;
     }
 
-    private boolean verifyJobSubmissionByJobId(RemoteCluster remoteCluster, String jobID) throws SSHApiException {
+    private boolean verifyJobSubmissionByJobId(RemoteCluster remoteCluster, String jobID) throws GFacException {
         JobStatus status = remoteCluster.getJobStatus(jobID);
         return status != null &&  status.getJobState() != JobState.UNKNOWN;
     }
@@ -301,7 +310,7 @@ public class DefaultJobSubmissionTask implements JobSubmissionTask {
         String jobId = null;
         try {
             jobId  = remoteCluster.getJobIdByJobName(jobName, remoteCluster.getServerInfo().getUserName());
-        } catch (SSHApiException e) {
+        } catch (GFacException e) {
             log.error("Error while verifying JobId from JobName");
         }
         return jobId;
@@ -358,7 +367,7 @@ public class DefaultJobSubmissionTask implements JobSubmissionTask {
 					throw new TaskException("Cancel operation failed, Job status couldn't find in resource, JobId " +
 							jobModel.getJobId());
 				}
-			} catch (SSHApiException | InterruptedException e) {
+			} catch ( GFacException | InterruptedException e) {
 				throw new TaskException("Error while cancelling job " + jobModel.getJobId(), e);
 			}
 		} else {

@@ -22,6 +22,7 @@
 package org.apache.airavata.gfac.impl;
 
 import org.apache.airavata.common.utils.AiravataUtils;
+import org.apache.airavata.credential.store.store.CredentialStoreException;
 import org.apache.airavata.gfac.core.GFacEngine;
 import org.apache.airavata.gfac.core.GFacException;
 import org.apache.airavata.gfac.core.GFacUtils;
@@ -66,7 +67,8 @@ public class GFacWorker implements Runnable {
 	/**
 	 * This constructor will be called when new or recovery request comes.
 	 */
-	public GFacWorker(String processId, String gatewayId, String tokenId) throws GFacException {
+	public GFacWorker(String processId, String gatewayId, String tokenId) throws GFacException,
+			CredentialStoreException {
 		this.processId = processId;
 		this.gatewayId = gatewayId;
 		this.tokenId = tokenId;
@@ -194,7 +196,9 @@ public class GFacWorker implements Runnable {
         }
         if (nextTaskId != null) {
             engine.continueProcess(processContext, nextTaskId);
-        }
+        }else {
+			processContext.setComplete(true);
+		}
         // checkpoint
         if (processContext.isInterrupted()) {
             return;

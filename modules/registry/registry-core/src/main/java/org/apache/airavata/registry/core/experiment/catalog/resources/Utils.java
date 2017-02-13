@@ -557,6 +557,7 @@ public class Utils {
             configurationDataResource.setOverrideAllocationProjectNumber(o.getOverrideAllocationProjectNumber());
             configurationDataResource.setStorageId(o.getStorageId());
             configurationDataResource.setExperimentDataDir(o.getExperimentDataDir());
+            configurationDataResource.setUseUserCRPref(o.isUseUserCRPref());
         }
         return configurationDataResource;
     }
@@ -581,6 +582,7 @@ public class Utils {
             processResource.setGenerateCert(o.getGenerateCert());
             processResource.setExperimentDataDir(o.getExperimentDataDir());
             processResource.setUserName(o.getUserName());
+            processResource.setUseUserCRPref(o.isUseUserCRPref());
         }
         return processResource;
     }
