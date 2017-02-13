@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.airavata</groupId>
+        <artifactId>wso2-is-admin-service</artifactId>
+        <version>0.17-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.apache.airavata</groupId>
+    <artifactId>wso2-idp-admin-thrift-stubs</artifactId>
+    <version>0.17-SNAPSHOT</version>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>${maven.replacer.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>${basedir}/src/main/java/org/apache/airavata/**/*.java</include>
+                    </includes>
+                    <token>, date = ".*"</token>
+                    <value> </value>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    
+</project>

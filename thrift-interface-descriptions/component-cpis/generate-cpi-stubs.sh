@@ -76,6 +76,9 @@ REGISTRY_SRC_DIR='../../modules/registry/registry-server/registry-api-stubs/src/
 USER_PROFILE_THRIFT_FILE='user-profile-cpi.thrift'
 USER_PROFILE_SRC_DIR='../../modules/user-profile/user-profile-stubs/src/main/java/'
 
+WSO2_IDP_ADMIN_CPI_THRIFT_FILE="wso2-idp-admin-cpi.thrift"
+WSO2_IDP_ADMIN_CPI_SRC_DIR="../../modules/wso2-idp-admin-service/wso2-idp-admin-thrift-stubs/src/main/java/"
+
 # Initialize the thrift arguments.
 #  Since most of the Airavata API and Data Models have includes, use recursive option by default.
 #  Generate all the files in target directory
@@ -174,12 +177,13 @@ generate_thrift_stubs() {
 for arg in "$@"
 do
     case "$arg" in
-    all)    echo "Generate all (credential store, orchestrator, gfac, user_profile) Stubs"
+    all)    echo "Generate all (credential store, orchestrator, gfac, user_profile, wso2) Stubs"
             generate_thrift_stubs ${CS_THRIFT_FILE} ${CS_SRC_DIR}
             generate_thrift_stubs ${ORCHESTRATOR_THRIFT_FILE} ${ORCHESTRATOR_SRC_DIR}
             generate_thrift_stubs ${GFAC_THRIFT_FILE} ${GFAC_SRC_DIR}
             generate_thrift_stubs ${REGISTRY_THRIFT_FILE} ${REGISTRY_SRC_DIR}
             generate_thrift_stubs ${USER_PROFILE_THRIFT_FILE} ${USER_PROFILE_SRC_DIR}
+            generate_thrift_stubs ${WSO2_IDP_ADMIN_CPI_THRIFT_FILE} ${WSO2_IDP_ADMIN_CPI_SRC_DIR}
             ;;
     cs)   echo "Generating Credential Store Stubs"
             generate_thrift_stubs ${CS_THRIFT_FILE} ${CS_SRC_DIR}
@@ -195,6 +199,9 @@ do
             ;;
     up)    echo "Generate User profile Stubs"
             generate_thrift_stubs ${USER_PROFILE_THRIFT_FILE} ${USER_PROFILE_SRC_DIR}
+            ;;
+    wso2)   echo "Generate wso 2 IDP admin Stubs"
+            generate_thrift_stubs ${WSO2_IDP_ADMIN_CPI_THRIFT_FILE} ${WSO2_IDP_ADMIN_CPI_SRC_DIR}
             ;;
     *)      echo "Invalid or unsupported option"
     	    show_usage

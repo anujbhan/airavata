@@ -660,6 +660,7 @@
                 <!--<module>modules/xbaya-gui</module>-->
                 <module>modules/distribution</module>
                 <module>modules/test-suite</module>
+                <module>modules/wso2-idp-admin-service</module>
             </modules>
         </profile>
         <profile>
