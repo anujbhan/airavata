@@ -124,10 +124,14 @@ public class ServerSettings extends ApplicationSettings {
     private static final String KAFKA_TOPIC_PREFIX = "kafka.topic.prefix";
     private static final String SERVER_ROLES = "server.roles";
 
-    //User Profile onstants
+    //User Profile constants
 
     public static final String USER_PROFILE_SERVER_HOST = "user.profile.server.host";
     public static final String USER_PROFILE_SERVER_PORT = "user.profile.server.port";
+
+    //wso2 idp admin service constants
+    public static final String WSO2_IDP_ADMIN_SERVER_HOST = "wso2.idp.admin.server.host";
+    public static final String WSO2_IDP_ADMIN_SERVER_PORT = "wso2.idp.admin.server.port";
 
     /* Caching */
     private static final String SESSION_CACHE_ACCESS_TIME_OUT = "ssh.session.cache.access.timeout";
@@ -486,5 +490,14 @@ public class ServerSettings extends ApplicationSettings {
 
     public static String getSharingRegistryHost() {
         return getSetting(SHARING_REGISTRY_HOST, "localhost");
+    }
+
+
+    public static String getWso2IdpAdminServerHost() throws ApplicationSettingsException {
+        return getSetting(ServerSettings.WSO2_IDP_ADMIN_SERVER_HOST);
+    }
+
+    public static String getWso2IdpAdminServerPort() throws ApplicationSettingsException{
+        return getSetting(ServerSettings.WSO2_IDP_ADMIN_SERVER_PORT);
     }
 }

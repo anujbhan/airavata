@@ -25,9 +25,9 @@
 
 include "wso2_idp_admin_cpi_errors.thrift"
 
-namespace java org.apache.airavata.userprofile.cpi
+namespace java org.apache.airavata.wso2.idp.admin.cpi
 
-const string WSO2_IDP_ADMIN_SERVICE_VERSION = "0.17"
+const string WSO2_IDP_ADMIN_SERVICE_VERSION = "0.01"
 
 service Wso2IdpAdminService {
       string addTenant(1: required string TenantName)

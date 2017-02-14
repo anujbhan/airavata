@@ -8,12 +8,12 @@
         <groupId>org.apache.airavata</groupId>
         <artifactId>airavata</artifactId>
         <version>0.17-SNAPSHOT</version>
-        <relativePath>../..</relativePath>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.airavata</groupId>
     <artifactId>wso2-idp-admin-service</artifactId>
-    <version>0.17-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <modules>
         <module>wso2-idp-admin-thrift-stubs</module>

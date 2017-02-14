@@ -6,13 +6,28 @@
 
     <parent>
         <groupId>org.apache.airavata</groupId>
-        <artifactId>wso2-is-admin-service</artifactId>
+        <artifactId>airavata</artifactId>
         <version>0.17-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.airavata</groupId>
     <artifactId>wso2-idp-admin-thrift-service</artifactId>
-    <version>0.17-SNAPSHOT</version>
+    <name>Airavata Wso 2 Admin Service</name>
+    <description>Module to expose wso2 IS admin Functionality to Airavata super admin dash</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.airavata</groupId>
+            <artifactId>airavata-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.airavata</groupId>
+            <artifactId>wso2-idp-admin-thrift-stubs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
     
 </project>

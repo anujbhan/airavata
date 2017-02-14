@@ -24,7 +24,7 @@
 *  built in funcationality to raise TApplicationException for all internal server errors.
 */
 
-namespace java org.apache.airavata.wso2.idp.admin.service.exception
+namespace java org.apache.airavata.wso2.idp.admin.cpi.exceptions
 
 exception Wso2IdpAdminServiceException {
   1: required string message
