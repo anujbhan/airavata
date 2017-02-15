@@ -24,12 +24,17 @@
 */
 
 include "wso2_idp_admin_cpi_errors.thrift"
+include "../data-models/wso2-admin-service-models/wso2_idp_admin_service_data_models.thrift"
 
 namespace java org.apache.airavata.wso2.idp.admin.cpi
 
 const string WSO2_IDP_ADMIN_SERVICE_VERSION = "0.01"
 
 service Wso2IdpAdminService {
-      string addTenant(1: required string TenantName)
+
+      /* Method used to add tenant into WSO2 Identity Server */
+      string addTenant(1: required wso2_idp_admin_service_data_models.TenantInfoBean tenantInfoBean)
             throws (1: wso2_idp_admin_cpi_errors.Wso2IdpAdminServiceException wso2IdpAdminServiceException)
+
+      string
 }
