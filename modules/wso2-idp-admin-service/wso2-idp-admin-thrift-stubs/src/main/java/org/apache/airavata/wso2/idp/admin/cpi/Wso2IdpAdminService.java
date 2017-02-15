@@ -55,13 +55,13 @@ public class Wso2IdpAdminService {
 
   public interface Iface {
 
-    public String addTenant(String TenantName) throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException;
+    public String addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean) throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException;
 
   }
 
   public interface AsyncIface {
 
-    public void addTenant(String TenantName, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
+    public void addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -85,16 +85,16 @@ public class Wso2IdpAdminService {
       super(iprot, oprot);
     }
 
-    public String addTenant(String TenantName) throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException
+    public String addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean) throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException
     {
-      send_addTenant(TenantName);
+      send_addTenant(tenantInfoBean);
       return recv_addTenant();
     }
 
-    public void send_addTenant(String TenantName) throws org.apache.thrift.TException
+    public void send_addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean) throws org.apache.thrift.TException
     {
       addTenant_args args = new addTenant_args();
-      args.setTenantName(TenantName);
+      args.setTenantInfoBean(tenantInfoBean);
       sendBase("addTenant", args);
     }
 
@@ -129,24 +129,24 @@ public class Wso2IdpAdminService {
       super(protocolFactory, clientManager, transport);
     }
 
-    public void addTenant(String TenantName, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
+    public void addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      addTenant_call method_call = new addTenant_call(TenantName, resultHandler, this, ___protocolFactory, ___transport);
+      addTenant_call method_call = new addTenant_call(tenantInfoBean, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class addTenant_call extends org.apache.thrift.async.TAsyncMethodCall {
-      private String TenantName;
-      public addTenant_call(String TenantName, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean;
+      public addTenant_call(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.TenantName = TenantName;
+        this.tenantInfoBean = tenantInfoBean;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("addTenant", org.apache.thrift.protocol.TMessageType.CALL, 0));
         addTenant_args args = new addTenant_args();
-        args.setTenantName(TenantName);
+        args.setTenantInfoBean(tenantInfoBean);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -194,7 +194,7 @@ public class Wso2IdpAdminService {
       public addTenant_result getResult(I iface, addTenant_args args) throws org.apache.thrift.TException {
         addTenant_result result = new addTenant_result();
         try {
-          result.success = iface.addTenant(args.TenantName);
+          result.success = iface.addTenant(args.tenantInfoBean);
         } catch (org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException wso2IdpAdminServiceException) {
           result.wso2IdpAdminServiceException = wso2IdpAdminServiceException;
         }
@@ -272,7 +272,7 @@ public class Wso2IdpAdminService {
       }
 
       public void start(I iface, addTenant_args args, org.apache.thrift.async.AsyncMethodCallback<String> resultHandler) throws TException {
-        iface.addTenant(args.TenantName,resultHandler);
+        iface.addTenant(args.tenantInfoBean,resultHandler);
       }
     }
 
@@ -281,7 +281,7 @@ public class Wso2IdpAdminService {
   public static class addTenant_args implements org.apache.thrift.TBase<addTenant_args, addTenant_args._Fields>, java.io.Serializable, Cloneable, Comparable<addTenant_args>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("addTenant_args");
 
-    private static final org.apache.thrift.protocol.TField TENANT_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("TenantName", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField TENANT_INFO_BEAN_FIELD_DESC = new org.apache.thrift.protocol.TField("tenantInfoBean", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -289,11 +289,11 @@ public class Wso2IdpAdminService {
       schemes.put(TupleScheme.class, new addTenant_argsTupleSchemeFactory());
     }
 
-    public String TenantName; // required
+    public org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      TENANT_NAME((short)1, "TenantName");
+      TENANT_INFO_BEAN((short)1, "tenantInfoBean");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -308,8 +308,8 @@ public class Wso2IdpAdminService {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // TENANT_NAME
-            return TENANT_NAME;
+          case 1: // TENANT_INFO_BEAN
+            return TENANT_INFO_BEAN;
           default:
             return null;
         }
@@ -353,8 +353,8 @@ public class Wso2IdpAdminService {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.TENANT_NAME, new org.apache.thrift.meta_data.FieldMetaData("TenantName", org.apache.thrift.TFieldRequirementType.REQUIRED, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.TENANT_INFO_BEAN, new org.apache.thrift.meta_data.FieldMetaData("tenantInfoBean", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, org.apache.airavata.model.wso2.adminservice.TenantInfoBean.class)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(addTenant_args.class, metaDataMap);
     }
@@ -363,18 +363,18 @@ public class Wso2IdpAdminService {
     }
 
     public addTenant_args(
-      String TenantName)
+      org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean)
     {
       this();
-      this.TenantName = TenantName;
+      this.tenantInfoBean = tenantInfoBean;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public addTenant_args(addTenant_args other) {
-      if (other.isSetTenantName()) {
-        this.TenantName = other.TenantName;
+      if (other.isSetTenantInfoBean()) {
+        this.tenantInfoBean = new org.apache.airavata.model.wso2.adminservice.TenantInfoBean(other.tenantInfoBean);
       }
     }
 
@@ -384,40 +384,40 @@ public class Wso2IdpAdminService {
 
     @Override
     public void clear() {
-      this.TenantName = null;
+      this.tenantInfoBean = null;
     }
 
-    public String getTenantName() {
-      return this.TenantName;
+    public org.apache.airavata.model.wso2.adminservice.TenantInfoBean getTenantInfoBean() {
+      return this.tenantInfoBean;
     }
 
-    public addTenant_args setTenantName(String TenantName) {
-      this.TenantName = TenantName;
+    public addTenant_args setTenantInfoBean(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean) {
+      this.tenantInfoBean = tenantInfoBean;
       return this;
     }
 
-    public void unsetTenantName() {
-      this.TenantName = null;
+    public void unsetTenantInfoBean() {
+      this.tenantInfoBean = null;
     }
 
-    /** Returns true if field TenantName is set (has been assigned a value) and false otherwise */
-    public boolean isSetTenantName() {
-      return this.TenantName != null;
+    /** Returns true if field tenantInfoBean is set (has been assigned a value) and false otherwise */
+    public boolean isSetTenantInfoBean() {
+      return this.tenantInfoBean != null;
     }
 
-    public void setTenantNameIsSet(boolean value) {
+    public void setTenantInfoBeanIsSet(boolean value) {
       if (!value) {
-        this.TenantName = null;
+        this.tenantInfoBean = null;
       }
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case TENANT_NAME:
+      case TENANT_INFO_BEAN:
         if (value == null) {
-          unsetTenantName();
+          unsetTenantInfoBean();
         } else {
-          setTenantName((String)value);
+          setTenantInfoBean((org.apache.airavata.model.wso2.adminservice.TenantInfoBean)value);
         }
         break;
 
@@ -426,8 +426,8 @@ public class Wso2IdpAdminService {
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case TENANT_NAME:
-        return getTenantName();
+      case TENANT_INFO_BEAN:
+        return getTenantInfoBean();
 
       }
       throw new IllegalStateException();
@@ -440,8 +440,8 @@ public class Wso2IdpAdminService {
       }
 
       switch (field) {
-      case TENANT_NAME:
-        return isSetTenantName();
+      case TENANT_INFO_BEAN:
+        return isSetTenantInfoBean();
       }
       throw new IllegalStateException();
     }
@@ -459,12 +459,12 @@ public class Wso2IdpAdminService {
       if (that == null)
         return false;
 
-      boolean this_present_TenantName = true && this.isSetTenantName();
-      boolean that_present_TenantName = true && that.isSetTenantName();
-      if (this_present_TenantName || that_present_TenantName) {
-        if (!(this_present_TenantName && that_present_TenantName))
+      boolean this_present_tenantInfoBean = true && this.isSetTenantInfoBean();
+      boolean that_present_tenantInfoBean = true && that.isSetTenantInfoBean();
+      if (this_present_tenantInfoBean || that_present_tenantInfoBean) {
+        if (!(this_present_tenantInfoBean && that_present_tenantInfoBean))
           return false;
-        if (!this.TenantName.equals(that.TenantName))
+        if (!this.tenantInfoBean.equals(that.tenantInfoBean))
           return false;
       }
 
@@ -475,10 +475,10 @@ public class Wso2IdpAdminService {
     public int hashCode() {
       List<Object> list = new ArrayList<Object>();
 
-      boolean present_TenantName = true && (isSetTenantName());
-      list.add(present_TenantName);
-      if (present_TenantName)
-        list.add(TenantName);
+      boolean present_tenantInfoBean = true && (isSetTenantInfoBean());
+      list.add(present_tenantInfoBean);
+      if (present_tenantInfoBean)
+        list.add(tenantInfoBean);
 
       return list.hashCode();
     }
@@ -491,12 +491,12 @@ public class Wso2IdpAdminService {
 
       int lastComparison = 0;
 
-      lastComparison = Boolean.valueOf(isSetTenantName()).compareTo(other.isSetTenantName());
+      lastComparison = Boolean.valueOf(isSetTenantInfoBean()).compareTo(other.isSetTenantInfoBean());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetTenantName()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.TenantName, other.TenantName);
+      if (isSetTenantInfoBean()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tenantInfoBean, other.tenantInfoBean);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -521,11 +521,11 @@ public class Wso2IdpAdminService {
       StringBuilder sb = new StringBuilder("addTenant_args(");
       boolean first = true;
 
-      sb.append("TenantName:");
-      if (this.TenantName == null) {
+      sb.append("tenantInfoBean:");
+      if (this.tenantInfoBean == null) {
         sb.append("null");
       } else {
-        sb.append(this.TenantName);
+        sb.append(this.tenantInfoBean);
       }
       first = false;
       sb.append(")");
@@ -534,10 +534,13 @@ public class Wso2IdpAdminService {
 
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
-      if (TenantName == null) {
-        throw new org.apache.thrift.protocol.TProtocolException("Required field 'TenantName' was not present! Struct: " + toString());
+      if (tenantInfoBean == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'tenantInfoBean' was not present! Struct: " + toString());
       }
       // check for sub-struct validity
+      if (tenantInfoBean != null) {
+        tenantInfoBean.validate();
+      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -574,10 +577,11 @@ public class Wso2IdpAdminService {
             break;
           }
           switch (schemeField.id) {
-            case 1: // TENANT_NAME
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.TenantName = iprot.readString();
-                struct.setTenantNameIsSet(true);
+            case 1: // TENANT_INFO_BEAN
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.tenantInfoBean = new org.apache.airavata.model.wso2.adminservice.TenantInfoBean();
+                struct.tenantInfoBean.read(iprot);
+                struct.setTenantInfoBeanIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
@@ -597,9 +601,9 @@ public class Wso2IdpAdminService {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.TenantName != null) {
-          oprot.writeFieldBegin(TENANT_NAME_FIELD_DESC);
-          oprot.writeString(struct.TenantName);
+        if (struct.tenantInfoBean != null) {
+          oprot.writeFieldBegin(TENANT_INFO_BEAN_FIELD_DESC);
+          struct.tenantInfoBean.write(oprot);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -619,14 +623,15 @@ public class Wso2IdpAdminService {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, addTenant_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
-        oprot.writeString(struct.TenantName);
+        struct.tenantInfoBean.write(oprot);
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, addTenant_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        struct.TenantName = iprot.readString();
-        struct.setTenantNameIsSet(true);
+        struct.tenantInfoBean = new org.apache.airavata.model.wso2.adminservice.TenantInfoBean();
+        struct.tenantInfoBean.read(iprot);
+        struct.setTenantInfoBeanIsSet(true);
       }
     }
 

@@ -36,5 +36,4 @@ service Wso2IdpAdminService {
       string addTenant(1: required wso2_idp_admin_service_data_models.TenantInfoBean tenantInfoBean)
             throws (1: wso2_idp_admin_cpi_errors.Wso2IdpAdminServiceException wso2IdpAdminServiceException)
 
-      string
 }
