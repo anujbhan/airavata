@@ -421,6 +421,10 @@ public class ApplicationSettings {
         return getSetting(ServerSettings.USER_PROFILE_SERVER_PORT);
     }
 
+    public static String getWso2IdpAdminTenantMgmtSOAPUrl() throws ApplicationSettingsException{
+        return getSetting("wso2.idp.admin.tenant.management.soap.url");
+    }
+
     /**
      * @deprecated use {{@link #getSetting(String)}}
      * @return

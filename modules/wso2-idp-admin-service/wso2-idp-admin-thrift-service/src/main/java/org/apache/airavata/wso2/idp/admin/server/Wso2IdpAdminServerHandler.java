@@ -21,7 +21,10 @@
 
 package org.apache.airavata.wso2.idp.admin.server;
 
+import org.apache.airavata.common.exception.ApplicationSettingsException;
+import org.apache.airavata.common.utils.ApplicationSettings;
 import org.apache.airavata.model.wso2.adminservice.TenantInfoBean;
+import org.apache.airavata.wso2.idp.admin.core.soapclient.Wso2IdpServerSoapClient;
 import org.apache.airavata.wso2.idp.admin.core.tenantmgmt.AddTenant;
 import org.apache.airavata.wso2.idp.admin.cpi.Wso2IdpAdminService;
 import org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException;
@@ -36,11 +39,20 @@ public class Wso2IdpAdminServerHandler implements Wso2IdpAdminService.Iface {
 
 
     @Override
-    public String addTenant(TenantInfoBean tenantInfoBean) throws Wso2IdpAdminServiceException, TException {
-        if(tenantInfoBean.isSetActive() && tenantInfoBean.isSetFirstName() && tenantInfoBean.isSetLastName() &&
-                tenantInfoBean.isSetEmail() && tenantInfoBean.isSetTenantDomain() && tenantInfoBean.isSetTenantId()){
-            
+    public boolean addTenant(TenantInfoBean tenantInfoBean, String superAdminPWDCredentialAccessToken, String gatewayID) throws Wso2IdpAdminServiceException, TException {
+        try{
+            if(tenantInfoBean.isSetActive() && tenantInfoBean.isSetFirstName() && tenantInfoBean.isSetLastName() &&
+                    tenantInfoBean.isSetEmail() && tenantInfoBean.isSetTenantDomain() && tenantInfoBean.isSetTenantId()){
+                SOAPMessage addTenantRequest = AddTenant.getSOAPRequestMessage(tenantInfoBean,gatewayID,superAdminPWDCredentialAccessToken);
+                String url = ApplicationSettings.getWso2IdpAdminTenantMgmtSOAPUrl();
+                SOAPMessage addTenantResponse = Wso2IdpServerSoapClient.sendSOAPRequest(addTenantRequest,url);
+                return AddTenant.isSOAPRequestSuccessful(addTenantResponse);
+            }
+        } catch (ApplicationSettingsException ex){
+            logger.error("Error while fetching SOAP URl for wso2 admin tenant Mgmt API", ex);
+            Wso2IdpAdminServiceException exception = new Wso2IdpAdminServiceException();
+            exception.setMessage("Error while fetching SOAP URl for wso2 admin tenant Mgmt API. More info : " + ex.getMessage());
+            throw exception;
         }
-        return null;
     }
 }

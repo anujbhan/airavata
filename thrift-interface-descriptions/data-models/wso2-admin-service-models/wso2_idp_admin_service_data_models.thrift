@@ -64,7 +64,7 @@ enum TenantUsagePlan{
  * successKey : String
  *
  * tenantDomain : String
- *    Tenant domain name
+ *    Tenant domain name, this should be unique in wso2
  *
  * tenantId : integer
  *    Tenant ID, this should be unique in wso2

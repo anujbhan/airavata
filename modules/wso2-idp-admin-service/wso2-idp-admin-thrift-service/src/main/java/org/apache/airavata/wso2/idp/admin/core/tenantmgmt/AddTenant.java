@@ -98,7 +98,6 @@ public class AddTenant {
             SOAPElement tenantInfoBean = rootElement.addChildElement("tenantInfoBean","ser");
             SOAPElement active = tenantInfoBean.addChildElement("active","ser");
             active.addTextNode(""+tenantInfoBeanObj.isActive());
-            // Fixme: where will the gateway ID come from ?
             PasswordCredential tenantAdminCredentials = credentialStoreClient.getPasswordCredential(tenantInfoBeanObj.getPasswordCredentialToken(),gatewayID);
             SOAPElement admin = tenantInfoBean.addChildElement("admin","ser");
             admin.addTextNode(tenantAdminCredentials.getLoginUserName());
@@ -130,7 +129,7 @@ public class AddTenant {
             tenantId.addTextNode(""+tenantInfoBeanObj.getTenantId());
             if(tenantInfoBeanObj.isSetUsagePlan()){
                 SOAPElement usagePlan = tenantInfoBean.addChildElement("usagePlan","ser");
-                usagePlan.addTextNode(tenantInfoBeanObj.getUsagePlan());
+                usagePlan.addTextNode(tenantInfoBeanObj.getUsagePlan().toString());
             }
             MimeHeaders headers = soapMessage.getMimeHeaders();
             headers.addHeader("Authorization", "Basic " + authorization);
@@ -155,7 +154,7 @@ public class AddTenant {
             SOAPEnvelope envelope = sourceContent.getEnvelope();
             SOAPBody soapBody = envelope.getBody();
             if(soapBody.hasFault()){
-                throw new Wso2IdpAdminServiceException("Please check the Soap message for correctness : " +
+                throw new Wso2IdpAdminServiceException("Check the SOAP request message for correctness (ex: TenantID not unique) : " +
                         soapBody.getFault().getFaultString());
             }else{
                 return true;
