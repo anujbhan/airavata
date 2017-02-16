@@ -21,6 +21,16 @@
  namespace java org.apache.airavata.model.wso2.adminservice
  namespace php Airavata.Model.Wso2.AdminService
 
+/* Usage plan for tenant
+* Currently only Demo is supported
+* */
+
+enum TenantUsagePlan{
+    DEMO
+}
+
+
+
  /*
  * TenantInfoBean contains information specific to a particular tenant, this data model will used to add
  * Tenants and retrieve tenant information
@@ -57,13 +67,12 @@
  *    Tenant domain name
  *
  * tenantId : integer
- *    Tenant ID
+ *    Tenant ID, this should be unique in wso2
  *
  * usagePlan : String
  *    usage plan for tenant
  *
  * */
-
 
 struct TenantInfoBean{
     1: required bool active;
@@ -76,5 +85,5 @@ struct TenantInfoBean{
     8: optional string successKey;
     9: required string tenantDomain;
     10: required i32 tenantId;
-    11: optional string usagePlan;
+    11: optional TenantUsagePlan usagePlan;
 }
