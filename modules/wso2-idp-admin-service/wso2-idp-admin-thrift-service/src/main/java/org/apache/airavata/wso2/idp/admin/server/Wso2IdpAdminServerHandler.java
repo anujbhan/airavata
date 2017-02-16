@@ -48,6 +48,7 @@ public class Wso2IdpAdminServerHandler implements Wso2IdpAdminService.Iface {
                 SOAPMessage addTenantResponse = Wso2IdpServerSoapClient.sendSOAPRequest(addTenantRequest,url);
                 return AddTenant.isSOAPRequestSuccessful(addTenantResponse);
             }
+		return false;
         } catch (ApplicationSettingsException ex){
             logger.error("Error while fetching SOAP URl for wso2 admin tenant Mgmt API", ex);
             Wso2IdpAdminServiceException exception = new Wso2IdpAdminServiceException();

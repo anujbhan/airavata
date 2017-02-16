@@ -55,7 +55,7 @@ public class Wso2IdpAdminService {
 
   public interface Iface {
 
-    public String addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, String superAdminPWDCredentialAccessToken, String adminGatewayID) throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException;
+    public boolean addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, String superAdminPWDCredentialAccessToken, String adminGatewayID) throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException;
 
   }
 
@@ -85,7 +85,7 @@ public class Wso2IdpAdminService {
       super(iprot, oprot);
     }
 
-    public String addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, String superAdminPWDCredentialAccessToken, String adminGatewayID) throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException
+    public boolean addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, String superAdminPWDCredentialAccessToken, String adminGatewayID) throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException
     {
       send_addTenant(tenantInfoBean, superAdminPWDCredentialAccessToken, adminGatewayID);
       return recv_addTenant();
@@ -100,7 +100,7 @@ public class Wso2IdpAdminService {
       sendBase("addTenant", args);
     }
 
-    public String recv_addTenant() throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException
+    public boolean recv_addTenant() throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException
     {
       addTenant_result result = new addTenant_result();
       receiveBase(result, "addTenant");
@@ -159,7 +159,7 @@ public class Wso2IdpAdminService {
         prot.writeMessageEnd();
       }
 
-      public String getResult() throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException {
+      public boolean getResult() throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -203,6 +203,7 @@ public class Wso2IdpAdminService {
         addTenant_result result = new addTenant_result();
         try {
           result.success = iface.addTenant(args.tenantInfoBean, args.superAdminPWDCredentialAccessToken, args.adminGatewayID);
+          result.setSuccessIsSet(true);
         } catch (org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException wso2IdpAdminServiceException) {
           result.wso2IdpAdminServiceException = wso2IdpAdminServiceException;
         }
@@ -227,7 +228,7 @@ public class Wso2IdpAdminService {
       return processMap;
     }
 
-    public static class addTenant<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, addTenant_args, String> {
+    public static class addTenant<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, addTenant_args, Boolean> {
       public addTenant() {
         super("addTenant");
       }
@@ -236,12 +237,13 @@ public class Wso2IdpAdminService {
         return new addTenant_args();
       }
 
-      public AsyncMethodCallback<String> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
+      public AsyncMethodCallback<Boolean> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
         final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new AsyncMethodCallback<String>() { 
-          public void onComplete(String o) {
+        return new AsyncMethodCallback<Boolean>() { 
+          public void onComplete(Boolean o) {
             addTenant_result result = new addTenant_result();
             result.success = o;
+            result.setSuccessIsSet(true);
             try {
               fcall.sendResponse(fb,result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
               return;
@@ -279,7 +281,7 @@ public class Wso2IdpAdminService {
         return false;
       }
 
-      public void start(I iface, addTenant_args args, org.apache.thrift.async.AsyncMethodCallback<String> resultHandler) throws TException {
+      public void start(I iface, addTenant_args args, org.apache.thrift.async.AsyncMethodCallback<Boolean> resultHandler) throws TException {
         iface.addTenant(args.tenantInfoBean, args.superAdminPWDCredentialAccessToken, args.adminGatewayID,resultHandler);
       }
     }
@@ -850,7 +852,7 @@ public class Wso2IdpAdminService {
   public static class addTenant_result implements org.apache.thrift.TBase<addTenant_result, addTenant_result._Fields>, java.io.Serializable, Cloneable, Comparable<addTenant_result>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("addTenant_result");
 
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRING, (short)0);
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
     private static final org.apache.thrift.protocol.TField WSO2_IDP_ADMIN_SERVICE_EXCEPTION_FIELD_DESC = new org.apache.thrift.protocol.TField("wso2IdpAdminServiceException", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
@@ -859,7 +861,7 @@ public class Wso2IdpAdminService {
       schemes.put(TupleScheme.class, new addTenant_resultTupleSchemeFactory());
     }
 
-    public String success; // required
+    public boolean success; // required
     public org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException wso2IdpAdminServiceException; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
@@ -924,11 +926,13 @@ public class Wso2IdpAdminService {
     }
 
     // isset id assignments
+    private static final int __SUCCESS_ISSET_ID = 0;
+    private byte __isset_bitfield = 0;
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
       tmpMap.put(_Fields.WSO2_IDP_ADMIN_SERVICE_EXCEPTION, new org.apache.thrift.meta_data.FieldMetaData("wso2IdpAdminServiceException", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -939,11 +943,12 @@ public class Wso2IdpAdminService {
     }
 
     public addTenant_result(
-      String success,
+      boolean success,
       org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException wso2IdpAdminServiceException)
     {
       this();
       this.success = success;
+      setSuccessIsSet(true);
       this.wso2IdpAdminServiceException = wso2IdpAdminServiceException;
     }
 
@@ -951,9 +956,8 @@ public class Wso2IdpAdminService {
      * Performs a deep copy on <i>other</i>.
      */
     public addTenant_result(addTenant_result other) {
-      if (other.isSetSuccess()) {
-        this.success = other.success;
-      }
+      __isset_bitfield = other.__isset_bitfield;
+      this.success = other.success;
       if (other.isSetWso2IdpAdminServiceException()) {
         this.wso2IdpAdminServiceException = new org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException(other.wso2IdpAdminServiceException);
       }
@@ -965,32 +969,32 @@ public class Wso2IdpAdminService {
 
     @Override
     public void clear() {
-      this.success = null;
+      setSuccessIsSet(false);
+      this.success = false;
       this.wso2IdpAdminServiceException = null;
     }
 
-    public String getSuccess() {
+    public boolean isSuccess() {
       return this.success;
     }
 
-    public addTenant_result setSuccess(String success) {
+    public addTenant_result setSuccess(boolean success) {
       this.success = success;
+      setSuccessIsSet(true);
       return this;
     }
 
     public void unsetSuccess() {
-      this.success = null;
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __SUCCESS_ISSET_ID);
     }
 
     /** Returns true if field success is set (has been assigned a value) and false otherwise */
     public boolean isSetSuccess() {
-      return this.success != null;
+      return EncodingUtils.testBit(__isset_bitfield, __SUCCESS_ISSET_ID);
     }
 
     public void setSuccessIsSet(boolean value) {
-      if (!value) {
-        this.success = null;
-      }
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
     }
 
     public org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException getWso2IdpAdminServiceException() {
@@ -1023,7 +1027,7 @@ public class Wso2IdpAdminService {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((String)value);
+          setSuccess((Boolean)value);
         }
         break;
 
@@ -1041,7 +1045,7 @@ public class Wso2IdpAdminService {
     public Object getFieldValue(_Fields field) {
       switch (field) {
       case SUCCESS:
-        return getSuccess();
+        return isSuccess();
 
       case WSO2_IDP_ADMIN_SERVICE_EXCEPTION:
         return getWso2IdpAdminServiceException();
@@ -1078,12 +1082,12 @@ public class Wso2IdpAdminService {
       if (that == null)
         return false;
 
-      boolean this_present_success = true && this.isSetSuccess();
-      boolean that_present_success = true && that.isSetSuccess();
+      boolean this_present_success = true;
+      boolean that_present_success = true;
       if (this_present_success || that_present_success) {
         if (!(this_present_success && that_present_success))
           return false;
-        if (!this.success.equals(that.success))
+        if (this.success != that.success)
           return false;
       }
 
@@ -1103,7 +1107,7 @@ public class Wso2IdpAdminService {
     public int hashCode() {
       List<Object> list = new ArrayList<Object>();
 
-      boolean present_success = true && (isSetSuccess());
+      boolean present_success = true;
       list.add(present_success);
       if (present_success)
         list.add(success);
@@ -1165,11 +1169,7 @@ public class Wso2IdpAdminService {
       boolean first = true;
 
       sb.append("success:");
-      if (this.success == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.success);
-      }
+      sb.append(this.success);
       first = false;
       if (!first) sb.append(", ");
       sb.append("wso2IdpAdminServiceException:");
@@ -1198,6 +1198,8 @@ public class Wso2IdpAdminService {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bitfield = 0;
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
@@ -1223,8 +1225,8 @@ public class Wso2IdpAdminService {
           }
           switch (schemeField.id) {
             case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.success = iprot.readString();
+              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+                struct.success = iprot.readBool();
                 struct.setSuccessIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -1254,9 +1256,9 @@ public class Wso2IdpAdminService {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.success != null) {
+        if (struct.isSetSuccess()) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          oprot.writeString(struct.success);
+          oprot.writeBool(struct.success);
           oprot.writeFieldEnd();
         }
         if (struct.wso2IdpAdminServiceException != null) {
@@ -1290,7 +1292,7 @@ public class Wso2IdpAdminService {
         }
         oprot.writeBitSet(optionals, 2);
         if (struct.isSetSuccess()) {
-          oprot.writeString(struct.success);
+          oprot.writeBool(struct.success);
         }
         if (struct.isSetWso2IdpAdminServiceException()) {
           struct.wso2IdpAdminServiceException.write(oprot);
@@ -1302,7 +1304,7 @@ public class Wso2IdpAdminService {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
-          struct.success = iprot.readString();
+          struct.success = iprot.readBool();
           struct.setSuccessIsSet(true);
         }
         if (incoming.get(1)) {
