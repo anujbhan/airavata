@@ -65,7 +65,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
   private static final org.apache.thrift.protocol.TField SUCCESS_KEY_FIELD_DESC = new org.apache.thrift.protocol.TField("successKey", org.apache.thrift.protocol.TType.STRING, (short)8);
   private static final org.apache.thrift.protocol.TField TENANT_DOMAIN_FIELD_DESC = new org.apache.thrift.protocol.TField("tenantDomain", org.apache.thrift.protocol.TType.STRING, (short)9);
   private static final org.apache.thrift.protocol.TField TENANT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("tenantId", org.apache.thrift.protocol.TType.I32, (short)10);
-  private static final org.apache.thrift.protocol.TField USAGE_PLAN_FIELD_DESC = new org.apache.thrift.protocol.TField("usagePlan", org.apache.thrift.protocol.TType.STRING, (short)11);
+  private static final org.apache.thrift.protocol.TField USAGE_PLAN_FIELD_DESC = new org.apache.thrift.protocol.TField("usagePlan", org.apache.thrift.protocol.TType.I32, (short)11);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -75,15 +75,15 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
 
   private boolean active; // required
   private String passwordCredentialToken; // required
-  private String createdDate; // optional
-  private String email; // optional
+  private String createdDate; // required
+  private String email; // required
   private String firstName; // required
   private String lastName; // required
   private String originatedService; // optional
   private String successKey; // optional
   private String tenantDomain; // required
   private int tenantId; // required
-  private String usagePlan; // optional
+  private TenantUsagePlan usagePlan; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -97,6 +97,10 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     SUCCESS_KEY((short)8, "successKey"),
     TENANT_DOMAIN((short)9, "tenantDomain"),
     TENANT_ID((short)10, "tenantId"),
+    /**
+     * 
+     * @see TenantUsagePlan
+     */
     USAGE_PLAN((short)11, "usagePlan");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
@@ -177,7 +181,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
   private static final int __ACTIVE_ISSET_ID = 0;
   private static final int __TENANTID_ISSET_ID = 1;
   private byte __isset_bitfield = 0;
-  private static final _Fields optionals[] = {_Fields.CREATED_DATE,_Fields.EMAIL,_Fields.ORIGINATED_SERVICE,_Fields.SUCCESS_KEY,_Fields.USAGE_PLAN};
+  private static final _Fields optionals[] = {_Fields.ORIGINATED_SERVICE,_Fields.SUCCESS_KEY,_Fields.USAGE_PLAN};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -185,9 +189,9 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
     tmpMap.put(_Fields.PASSWORD_CREDENTIAL_TOKEN, new org.apache.thrift.meta_data.FieldMetaData("passwordCredentialToken", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.CREATED_DATE, new org.apache.thrift.meta_data.FieldMetaData("createdDate", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+    tmpMap.put(_Fields.CREATED_DATE, new org.apache.thrift.meta_data.FieldMetaData("createdDate", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.EMAIL, new org.apache.thrift.meta_data.FieldMetaData("email", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+    tmpMap.put(_Fields.EMAIL, new org.apache.thrift.meta_data.FieldMetaData("email", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.FIRST_NAME, new org.apache.thrift.meta_data.FieldMetaData("firstName", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
@@ -202,7 +206,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     tmpMap.put(_Fields.TENANT_ID, new org.apache.thrift.meta_data.FieldMetaData("tenantId", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
     tmpMap.put(_Fields.USAGE_PLAN, new org.apache.thrift.meta_data.FieldMetaData("usagePlan", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+        new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, TenantUsagePlan.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(TenantInfoBean.class, metaDataMap);
   }
@@ -213,6 +217,8 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
   public TenantInfoBean(
     boolean active,
     String passwordCredentialToken,
+    String createdDate,
+    String email,
     String firstName,
     String lastName,
     String tenantDomain,
@@ -222,6 +228,8 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     this.active = active;
     setActiveIsSet(true);
     this.passwordCredentialToken = passwordCredentialToken;
+    this.createdDate = createdDate;
+    this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;
     this.tenantDomain = tenantDomain;
@@ -514,11 +522,19 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __TENANTID_ISSET_ID, value);
   }
 
-  public String getUsagePlan() {
+  /**
+   * 
+   * @see TenantUsagePlan
+   */
+  public TenantUsagePlan getUsagePlan() {
     return this.usagePlan;
   }
 
-  public void setUsagePlan(String usagePlan) {
+  /**
+   * 
+   * @see TenantUsagePlan
+   */
+  public void setUsagePlan(TenantUsagePlan usagePlan) {
     this.usagePlan = usagePlan;
   }
 
@@ -623,7 +639,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
       if (value == null) {
         unsetUsagePlan();
       } else {
-        setUsagePlan((String)value);
+        setUsagePlan((TenantUsagePlan)value);
       }
       break;
 
@@ -874,7 +890,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     boolean present_usagePlan = true && (isSetUsagePlan());
     list.add(present_usagePlan);
     if (present_usagePlan)
-      list.add(usagePlan);
+      list.add(usagePlan.getValue());
 
     return list.hashCode();
   }
@@ -1028,26 +1044,22 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
       sb.append(this.passwordCredentialToken);
     }
     first = false;
-    if (isSetCreatedDate()) {
-      if (!first) sb.append(", ");
-      sb.append("createdDate:");
-      if (this.createdDate == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.createdDate);
-      }
-      first = false;
+    if (!first) sb.append(", ");
+    sb.append("createdDate:");
+    if (this.createdDate == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.createdDate);
     }
-    if (isSetEmail()) {
-      if (!first) sb.append(", ");
-      sb.append("email:");
-      if (this.email == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.email);
-      }
-      first = false;
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("email:");
+    if (this.email == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.email);
     }
+    first = false;
     if (!first) sb.append(", ");
     sb.append("firstName:");
     if (this.firstName == null) {
@@ -1118,6 +1130,14 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
 
     if (!isSetPasswordCredentialToken()) {
       throw new org.apache.thrift.protocol.TProtocolException("Required field 'passwordCredentialToken' is unset! Struct:" + toString());
+    }
+
+    if (!isSetCreatedDate()) {
+      throw new org.apache.thrift.protocol.TProtocolException("Required field 'createdDate' is unset! Struct:" + toString());
+    }
+
+    if (!isSetEmail()) {
+      throw new org.apache.thrift.protocol.TProtocolException("Required field 'email' is unset! Struct:" + toString());
     }
 
     if (!isSetFirstName()) {
@@ -1256,8 +1276,8 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
             }
             break;
           case 11: // USAGE_PLAN
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.usagePlan = iprot.readString();
+            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+              struct.usagePlan = org.apache.airavata.model.wso2.adminservice.TenantUsagePlan.findByValue(iprot.readI32());
               struct.setUsagePlanIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -1285,18 +1305,14 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
         oprot.writeFieldEnd();
       }
       if (struct.createdDate != null) {
-        if (struct.isSetCreatedDate()) {
-          oprot.writeFieldBegin(CREATED_DATE_FIELD_DESC);
-          oprot.writeString(struct.createdDate);
-          oprot.writeFieldEnd();
-        }
+        oprot.writeFieldBegin(CREATED_DATE_FIELD_DESC);
+        oprot.writeString(struct.createdDate);
+        oprot.writeFieldEnd();
       }
       if (struct.email != null) {
-        if (struct.isSetEmail()) {
-          oprot.writeFieldBegin(EMAIL_FIELD_DESC);
-          oprot.writeString(struct.email);
-          oprot.writeFieldEnd();
-        }
+        oprot.writeFieldBegin(EMAIL_FIELD_DESC);
+        oprot.writeString(struct.email);
+        oprot.writeFieldEnd();
       }
       if (struct.firstName != null) {
         oprot.writeFieldBegin(FIRST_NAME_FIELD_DESC);
@@ -1333,7 +1349,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
       if (struct.usagePlan != null) {
         if (struct.isSetUsagePlan()) {
           oprot.writeFieldBegin(USAGE_PLAN_FIELD_DESC);
-          oprot.writeString(struct.usagePlan);
+          oprot.writeI32(struct.usagePlan.getValue());
           oprot.writeFieldEnd();
         }
       }
@@ -1356,33 +1372,23 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
       TTupleProtocol oprot = (TTupleProtocol) prot;
       oprot.writeBool(struct.active);
       oprot.writeString(struct.passwordCredentialToken);
+      oprot.writeString(struct.createdDate);
+      oprot.writeString(struct.email);
       oprot.writeString(struct.firstName);
       oprot.writeString(struct.lastName);
       oprot.writeString(struct.tenantDomain);
       oprot.writeI32(struct.tenantId);
       BitSet optionals = new BitSet();
-      if (struct.isSetCreatedDate()) {
+      if (struct.isSetOriginatedService()) {
         optionals.set(0);
       }
-      if (struct.isSetEmail()) {
+      if (struct.isSetSuccessKey()) {
         optionals.set(1);
       }
-      if (struct.isSetOriginatedService()) {
+      if (struct.isSetUsagePlan()) {
         optionals.set(2);
       }
-      if (struct.isSetSuccessKey()) {
-        optionals.set(3);
-      }
-      if (struct.isSetUsagePlan()) {
-        optionals.set(4);
-      }
-      oprot.writeBitSet(optionals, 5);
-      if (struct.isSetCreatedDate()) {
-        oprot.writeString(struct.createdDate);
-      }
-      if (struct.isSetEmail()) {
-        oprot.writeString(struct.email);
-      }
+      oprot.writeBitSet(optionals, 3);
       if (struct.isSetOriginatedService()) {
         oprot.writeString(struct.originatedService);
       }
@@ -1390,7 +1396,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
         oprot.writeString(struct.successKey);
       }
       if (struct.isSetUsagePlan()) {
-        oprot.writeString(struct.usagePlan);
+        oprot.writeI32(struct.usagePlan.getValue());
       }
     }
 
@@ -1401,6 +1407,10 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
       struct.setActiveIsSet(true);
       struct.passwordCredentialToken = iprot.readString();
       struct.setPasswordCredentialTokenIsSet(true);
+      struct.createdDate = iprot.readString();
+      struct.setCreatedDateIsSet(true);
+      struct.email = iprot.readString();
+      struct.setEmailIsSet(true);
       struct.firstName = iprot.readString();
       struct.setFirstNameIsSet(true);
       struct.lastName = iprot.readString();
@@ -1409,25 +1419,17 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
       struct.setTenantDomainIsSet(true);
       struct.tenantId = iprot.readI32();
       struct.setTenantIdIsSet(true);
-      BitSet incoming = iprot.readBitSet(5);
+      BitSet incoming = iprot.readBitSet(3);
       if (incoming.get(0)) {
-        struct.createdDate = iprot.readString();
-        struct.setCreatedDateIsSet(true);
-      }
-      if (incoming.get(1)) {
-        struct.email = iprot.readString();
-        struct.setEmailIsSet(true);
-      }
-      if (incoming.get(2)) {
         struct.originatedService = iprot.readString();
         struct.setOriginatedServiceIsSet(true);
       }
-      if (incoming.get(3)) {
+      if (incoming.get(1)) {
         struct.successKey = iprot.readString();
         struct.setSuccessKeyIsSet(true);
       }
-      if (incoming.get(4)) {
-        struct.usagePlan = iprot.readString();
+      if (incoming.get(2)) {
+        struct.usagePlan = org.apache.airavata.model.wso2.adminservice.TenantUsagePlan.findByValue(iprot.readI32());
         struct.setUsagePlanIsSet(true);
       }
     }

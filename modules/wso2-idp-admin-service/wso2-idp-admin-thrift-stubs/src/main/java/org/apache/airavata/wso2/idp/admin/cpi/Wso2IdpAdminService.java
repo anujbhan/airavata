@@ -55,13 +55,13 @@ public class Wso2IdpAdminService {
 
   public interface Iface {
 
-    public String addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean) throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException;
+    public String addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, String superAdminPWDCredentialAccessToken, String adminGatewayID) throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException;
 
   }
 
   public interface AsyncIface {
 
-    public void addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
+    public void addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, String superAdminPWDCredentialAccessToken, String adminGatewayID, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -85,16 +85,18 @@ public class Wso2IdpAdminService {
       super(iprot, oprot);
     }
 
-    public String addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean) throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException
+    public String addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, String superAdminPWDCredentialAccessToken, String adminGatewayID) throws org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException, org.apache.thrift.TException
     {
-      send_addTenant(tenantInfoBean);
+      send_addTenant(tenantInfoBean, superAdminPWDCredentialAccessToken, adminGatewayID);
       return recv_addTenant();
     }
 
-    public void send_addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean) throws org.apache.thrift.TException
+    public void send_addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, String superAdminPWDCredentialAccessToken, String adminGatewayID) throws org.apache.thrift.TException
     {
       addTenant_args args = new addTenant_args();
       args.setTenantInfoBean(tenantInfoBean);
+      args.setSuperAdminPWDCredentialAccessToken(superAdminPWDCredentialAccessToken);
+      args.setAdminGatewayID(adminGatewayID);
       sendBase("addTenant", args);
     }
 
@@ -129,24 +131,30 @@ public class Wso2IdpAdminService {
       super(protocolFactory, clientManager, transport);
     }
 
-    public void addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
+    public void addTenant(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, String superAdminPWDCredentialAccessToken, String adminGatewayID, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      addTenant_call method_call = new addTenant_call(tenantInfoBean, resultHandler, this, ___protocolFactory, ___transport);
+      addTenant_call method_call = new addTenant_call(tenantInfoBean, superAdminPWDCredentialAccessToken, adminGatewayID, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class addTenant_call extends org.apache.thrift.async.TAsyncMethodCall {
       private org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean;
-      public addTenant_call(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private String superAdminPWDCredentialAccessToken;
+      private String adminGatewayID;
+      public addTenant_call(org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean, String superAdminPWDCredentialAccessToken, String adminGatewayID, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.tenantInfoBean = tenantInfoBean;
+        this.superAdminPWDCredentialAccessToken = superAdminPWDCredentialAccessToken;
+        this.adminGatewayID = adminGatewayID;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("addTenant", org.apache.thrift.protocol.TMessageType.CALL, 0));
         addTenant_args args = new addTenant_args();
         args.setTenantInfoBean(tenantInfoBean);
+        args.setSuperAdminPWDCredentialAccessToken(superAdminPWDCredentialAccessToken);
+        args.setAdminGatewayID(adminGatewayID);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -194,7 +202,7 @@ public class Wso2IdpAdminService {
       public addTenant_result getResult(I iface, addTenant_args args) throws org.apache.thrift.TException {
         addTenant_result result = new addTenant_result();
         try {
-          result.success = iface.addTenant(args.tenantInfoBean);
+          result.success = iface.addTenant(args.tenantInfoBean, args.superAdminPWDCredentialAccessToken, args.adminGatewayID);
         } catch (org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException wso2IdpAdminServiceException) {
           result.wso2IdpAdminServiceException = wso2IdpAdminServiceException;
         }
@@ -272,7 +280,7 @@ public class Wso2IdpAdminService {
       }
 
       public void start(I iface, addTenant_args args, org.apache.thrift.async.AsyncMethodCallback<String> resultHandler) throws TException {
-        iface.addTenant(args.tenantInfoBean,resultHandler);
+        iface.addTenant(args.tenantInfoBean, args.superAdminPWDCredentialAccessToken, args.adminGatewayID,resultHandler);
       }
     }
 
@@ -282,6 +290,8 @@ public class Wso2IdpAdminService {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("addTenant_args");
 
     private static final org.apache.thrift.protocol.TField TENANT_INFO_BEAN_FIELD_DESC = new org.apache.thrift.protocol.TField("tenantInfoBean", org.apache.thrift.protocol.TType.STRUCT, (short)1);
+    private static final org.apache.thrift.protocol.TField SUPER_ADMIN_PWDCREDENTIAL_ACCESS_TOKEN_FIELD_DESC = new org.apache.thrift.protocol.TField("superAdminPWDCredentialAccessToken", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField ADMIN_GATEWAY_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("adminGatewayID", org.apache.thrift.protocol.TType.STRING, (short)3);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -290,10 +300,14 @@ public class Wso2IdpAdminService {
     }
 
     public org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean; // required
+    public String superAdminPWDCredentialAccessToken; // required
+    public String adminGatewayID; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      TENANT_INFO_BEAN((short)1, "tenantInfoBean");
+      TENANT_INFO_BEAN((short)1, "tenantInfoBean"),
+      SUPER_ADMIN_PWDCREDENTIAL_ACCESS_TOKEN((short)2, "superAdminPWDCredentialAccessToken"),
+      ADMIN_GATEWAY_ID((short)3, "adminGatewayID");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -310,6 +324,10 @@ public class Wso2IdpAdminService {
         switch(fieldId) {
           case 1: // TENANT_INFO_BEAN
             return TENANT_INFO_BEAN;
+          case 2: // SUPER_ADMIN_PWDCREDENTIAL_ACCESS_TOKEN
+            return SUPER_ADMIN_PWDCREDENTIAL_ACCESS_TOKEN;
+          case 3: // ADMIN_GATEWAY_ID
+            return ADMIN_GATEWAY_ID;
           default:
             return null;
         }
@@ -355,6 +373,10 @@ public class Wso2IdpAdminService {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.TENANT_INFO_BEAN, new org.apache.thrift.meta_data.FieldMetaData("tenantInfoBean", org.apache.thrift.TFieldRequirementType.REQUIRED, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, org.apache.airavata.model.wso2.adminservice.TenantInfoBean.class)));
+      tmpMap.put(_Fields.SUPER_ADMIN_PWDCREDENTIAL_ACCESS_TOKEN, new org.apache.thrift.meta_data.FieldMetaData("superAdminPWDCredentialAccessToken", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.ADMIN_GATEWAY_ID, new org.apache.thrift.meta_data.FieldMetaData("adminGatewayID", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(addTenant_args.class, metaDataMap);
     }
@@ -363,10 +385,14 @@ public class Wso2IdpAdminService {
     }
 
     public addTenant_args(
-      org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean)
+      org.apache.airavata.model.wso2.adminservice.TenantInfoBean tenantInfoBean,
+      String superAdminPWDCredentialAccessToken,
+      String adminGatewayID)
     {
       this();
       this.tenantInfoBean = tenantInfoBean;
+      this.superAdminPWDCredentialAccessToken = superAdminPWDCredentialAccessToken;
+      this.adminGatewayID = adminGatewayID;
     }
 
     /**
@@ -375,6 +401,12 @@ public class Wso2IdpAdminService {
     public addTenant_args(addTenant_args other) {
       if (other.isSetTenantInfoBean()) {
         this.tenantInfoBean = new org.apache.airavata.model.wso2.adminservice.TenantInfoBean(other.tenantInfoBean);
+      }
+      if (other.isSetSuperAdminPWDCredentialAccessToken()) {
+        this.superAdminPWDCredentialAccessToken = other.superAdminPWDCredentialAccessToken;
+      }
+      if (other.isSetAdminGatewayID()) {
+        this.adminGatewayID = other.adminGatewayID;
       }
     }
 
@@ -385,6 +417,8 @@ public class Wso2IdpAdminService {
     @Override
     public void clear() {
       this.tenantInfoBean = null;
+      this.superAdminPWDCredentialAccessToken = null;
+      this.adminGatewayID = null;
     }
 
     public org.apache.airavata.model.wso2.adminservice.TenantInfoBean getTenantInfoBean() {
@@ -411,6 +445,54 @@ public class Wso2IdpAdminService {
       }
     }
 
+    public String getSuperAdminPWDCredentialAccessToken() {
+      return this.superAdminPWDCredentialAccessToken;
+    }
+
+    public addTenant_args setSuperAdminPWDCredentialAccessToken(String superAdminPWDCredentialAccessToken) {
+      this.superAdminPWDCredentialAccessToken = superAdminPWDCredentialAccessToken;
+      return this;
+    }
+
+    public void unsetSuperAdminPWDCredentialAccessToken() {
+      this.superAdminPWDCredentialAccessToken = null;
+    }
+
+    /** Returns true if field superAdminPWDCredentialAccessToken is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuperAdminPWDCredentialAccessToken() {
+      return this.superAdminPWDCredentialAccessToken != null;
+    }
+
+    public void setSuperAdminPWDCredentialAccessTokenIsSet(boolean value) {
+      if (!value) {
+        this.superAdminPWDCredentialAccessToken = null;
+      }
+    }
+
+    public String getAdminGatewayID() {
+      return this.adminGatewayID;
+    }
+
+    public addTenant_args setAdminGatewayID(String adminGatewayID) {
+      this.adminGatewayID = adminGatewayID;
+      return this;
+    }
+
+    public void unsetAdminGatewayID() {
+      this.adminGatewayID = null;
+    }
+
+    /** Returns true if field adminGatewayID is set (has been assigned a value) and false otherwise */
+    public boolean isSetAdminGatewayID() {
+      return this.adminGatewayID != null;
+    }
+
+    public void setAdminGatewayIDIsSet(boolean value) {
+      if (!value) {
+        this.adminGatewayID = null;
+      }
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case TENANT_INFO_BEAN:
@@ -421,6 +503,22 @@ public class Wso2IdpAdminService {
         }
         break;
 
+      case SUPER_ADMIN_PWDCREDENTIAL_ACCESS_TOKEN:
+        if (value == null) {
+          unsetSuperAdminPWDCredentialAccessToken();
+        } else {
+          setSuperAdminPWDCredentialAccessToken((String)value);
+        }
+        break;
+
+      case ADMIN_GATEWAY_ID:
+        if (value == null) {
+          unsetAdminGatewayID();
+        } else {
+          setAdminGatewayID((String)value);
+        }
+        break;
+
       }
     }
 
@@ -428,6 +526,12 @@ public class Wso2IdpAdminService {
       switch (field) {
       case TENANT_INFO_BEAN:
         return getTenantInfoBean();
+
+      case SUPER_ADMIN_PWDCREDENTIAL_ACCESS_TOKEN:
+        return getSuperAdminPWDCredentialAccessToken();
+
+      case ADMIN_GATEWAY_ID:
+        return getAdminGatewayID();
 
       }
       throw new IllegalStateException();
@@ -442,6 +546,10 @@ public class Wso2IdpAdminService {
       switch (field) {
       case TENANT_INFO_BEAN:
         return isSetTenantInfoBean();
+      case SUPER_ADMIN_PWDCREDENTIAL_ACCESS_TOKEN:
+        return isSetSuperAdminPWDCredentialAccessToken();
+      case ADMIN_GATEWAY_ID:
+        return isSetAdminGatewayID();
       }
       throw new IllegalStateException();
     }
@@ -468,6 +576,24 @@ public class Wso2IdpAdminService {
           return false;
       }
 
+      boolean this_present_superAdminPWDCredentialAccessToken = true && this.isSetSuperAdminPWDCredentialAccessToken();
+      boolean that_present_superAdminPWDCredentialAccessToken = true && that.isSetSuperAdminPWDCredentialAccessToken();
+      if (this_present_superAdminPWDCredentialAccessToken || that_present_superAdminPWDCredentialAccessToken) {
+        if (!(this_present_superAdminPWDCredentialAccessToken && that_present_superAdminPWDCredentialAccessToken))
+          return false;
+        if (!this.superAdminPWDCredentialAccessToken.equals(that.superAdminPWDCredentialAccessToken))
+          return false;
+      }
+
+      boolean this_present_adminGatewayID = true && this.isSetAdminGatewayID();
+      boolean that_present_adminGatewayID = true && that.isSetAdminGatewayID();
+      if (this_present_adminGatewayID || that_present_adminGatewayID) {
+        if (!(this_present_adminGatewayID && that_present_adminGatewayID))
+          return false;
+        if (!this.adminGatewayID.equals(that.adminGatewayID))
+          return false;
+      }
+
       return true;
     }
 
@@ -479,6 +605,16 @@ public class Wso2IdpAdminService {
       list.add(present_tenantInfoBean);
       if (present_tenantInfoBean)
         list.add(tenantInfoBean);
+
+      boolean present_superAdminPWDCredentialAccessToken = true && (isSetSuperAdminPWDCredentialAccessToken());
+      list.add(present_superAdminPWDCredentialAccessToken);
+      if (present_superAdminPWDCredentialAccessToken)
+        list.add(superAdminPWDCredentialAccessToken);
+
+      boolean present_adminGatewayID = true && (isSetAdminGatewayID());
+      list.add(present_adminGatewayID);
+      if (present_adminGatewayID)
+        list.add(adminGatewayID);
 
       return list.hashCode();
     }
@@ -497,6 +633,26 @@ public class Wso2IdpAdminService {
       }
       if (isSetTenantInfoBean()) {
         lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tenantInfoBean, other.tenantInfoBean);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetSuperAdminPWDCredentialAccessToken()).compareTo(other.isSetSuperAdminPWDCredentialAccessToken());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuperAdminPWDCredentialAccessToken()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.superAdminPWDCredentialAccessToken, other.superAdminPWDCredentialAccessToken);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetAdminGatewayID()).compareTo(other.isSetAdminGatewayID());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetAdminGatewayID()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.adminGatewayID, other.adminGatewayID);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -528,6 +684,22 @@ public class Wso2IdpAdminService {
         sb.append(this.tenantInfoBean);
       }
       first = false;
+      if (!first) sb.append(", ");
+      sb.append("superAdminPWDCredentialAccessToken:");
+      if (this.superAdminPWDCredentialAccessToken == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.superAdminPWDCredentialAccessToken);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("adminGatewayID:");
+      if (this.adminGatewayID == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.adminGatewayID);
+      }
+      first = false;
       sb.append(")");
       return sb.toString();
     }
@@ -536,6 +708,12 @@ public class Wso2IdpAdminService {
       // check for required fields
       if (tenantInfoBean == null) {
         throw new org.apache.thrift.protocol.TProtocolException("Required field 'tenantInfoBean' was not present! Struct: " + toString());
+      }
+      if (superAdminPWDCredentialAccessToken == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'superAdminPWDCredentialAccessToken' was not present! Struct: " + toString());
+      }
+      if (adminGatewayID == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'adminGatewayID' was not present! Struct: " + toString());
       }
       // check for sub-struct validity
       if (tenantInfoBean != null) {
@@ -586,6 +764,22 @@ public class Wso2IdpAdminService {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 2: // SUPER_ADMIN_PWDCREDENTIAL_ACCESS_TOKEN
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.superAdminPWDCredentialAccessToken = iprot.readString();
+                struct.setSuperAdminPWDCredentialAccessTokenIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 3: // ADMIN_GATEWAY_ID
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.adminGatewayID = iprot.readString();
+                struct.setAdminGatewayIDIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -606,6 +800,16 @@ public class Wso2IdpAdminService {
           struct.tenantInfoBean.write(oprot);
           oprot.writeFieldEnd();
         }
+        if (struct.superAdminPWDCredentialAccessToken != null) {
+          oprot.writeFieldBegin(SUPER_ADMIN_PWDCREDENTIAL_ACCESS_TOKEN_FIELD_DESC);
+          oprot.writeString(struct.superAdminPWDCredentialAccessToken);
+          oprot.writeFieldEnd();
+        }
+        if (struct.adminGatewayID != null) {
+          oprot.writeFieldBegin(ADMIN_GATEWAY_ID_FIELD_DESC);
+          oprot.writeString(struct.adminGatewayID);
+          oprot.writeFieldEnd();
+        }
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
@@ -624,6 +828,8 @@ public class Wso2IdpAdminService {
       public void write(org.apache.thrift.protocol.TProtocol prot, addTenant_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
         struct.tenantInfoBean.write(oprot);
+        oprot.writeString(struct.superAdminPWDCredentialAccessToken);
+        oprot.writeString(struct.adminGatewayID);
       }
 
       @Override
@@ -632,6 +838,10 @@ public class Wso2IdpAdminService {
         struct.tenantInfoBean = new org.apache.airavata.model.wso2.adminservice.TenantInfoBean();
         struct.tenantInfoBean.read(iprot);
         struct.setTenantInfoBeanIsSet(true);
+        struct.superAdminPWDCredentialAccessToken = iprot.readString();
+        struct.setSuperAdminPWDCredentialAccessTokenIsSet(true);
+        struct.adminGatewayID = iprot.readString();
+        struct.setAdminGatewayIDIsSet(true);
       }
     }
 
