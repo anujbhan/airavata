@@ -37,6 +37,7 @@
  *   Password credential token used to fetch tenant admin username and password
  *
  * createdDate : string
+ *   format : ISO 8601 formatted date ( 2017-02-16T16:34:08+00:00 )
  *   Date and time of tenant creation
  *
  * email : String
@@ -67,8 +68,8 @@
 struct TenantInfoBean{
     1: required bool active;
     2: required string passwordCredentialToken;
-    3: optional string createdDate;
-    4: optional string email;
+    3: required string createdDate;
+    4: required string email;
     5: required string firstName;
     6: required string lastName;
     7: optional string originatedService;

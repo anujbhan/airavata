@@ -21,17 +21,26 @@
 
 package org.apache.airavata.wso2.idp.admin.server;
 
+import org.apache.airavata.model.wso2.adminservice.TenantInfoBean;
+import org.apache.airavata.wso2.idp.admin.core.tenantmgmt.AddTenant;
 import org.apache.airavata.wso2.idp.admin.cpi.Wso2IdpAdminService;
 import org.apache.airavata.wso2.idp.admin.cpi.exceptions.Wso2IdpAdminServiceException;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.soap.SOAPMessage;
+
 public class Wso2IdpAdminServerHandler implements Wso2IdpAdminService.Iface {
     private final static Logger logger = LoggerFactory.getLogger(Wso2IdpAdminServerHandler.class);
 
+
     @Override
-    public String addTenant(String TenantName) throws Wso2IdpAdminServiceException, TException {
+    public String addTenant(TenantInfoBean tenantInfoBean) throws Wso2IdpAdminServiceException, TException {
+        if(tenantInfoBean.isSetActive() && tenantInfoBean.isSetFirstName() && tenantInfoBean.isSetLastName() &&
+                tenantInfoBean.isSetEmail() && tenantInfoBean.isSetTenantDomain() && tenantInfoBean.isSetTenantId()){
+            
+        }
         return null;
     }
 }
