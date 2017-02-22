@@ -56,7 +56,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("TenantInfoBean");
 
   private static final org.apache.thrift.protocol.TField ACTIVE_FIELD_DESC = new org.apache.thrift.protocol.TField("active", org.apache.thrift.protocol.TType.BOOL, (short)1);
-  private static final org.apache.thrift.protocol.TField PASSWORD_CREDENTIAL_TOKEN_FIELD_DESC = new org.apache.thrift.protocol.TField("passwordCredentialToken", org.apache.thrift.protocol.TType.STRING, (short)2);
+  private static final org.apache.thrift.protocol.TField TENANT_ADMIN_PWDCREDS_TOKEN_FIELD_DESC = new org.apache.thrift.protocol.TField("tenantAdminPWDCredsToken", org.apache.thrift.protocol.TType.STRING, (short)2);
   private static final org.apache.thrift.protocol.TField CREATED_DATE_FIELD_DESC = new org.apache.thrift.protocol.TField("createdDate", org.apache.thrift.protocol.TType.STRING, (short)3);
   private static final org.apache.thrift.protocol.TField EMAIL_FIELD_DESC = new org.apache.thrift.protocol.TField("email", org.apache.thrift.protocol.TType.STRING, (short)4);
   private static final org.apache.thrift.protocol.TField FIRST_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("firstName", org.apache.thrift.protocol.TType.STRING, (short)5);
@@ -74,7 +74,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
   }
 
   private boolean active; // required
-  private String passwordCredentialToken; // required
+  private String tenantAdminPWDCredsToken; // required
   private String createdDate; // required
   private String email; // required
   private String firstName; // required
@@ -88,7 +88,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     ACTIVE((short)1, "active"),
-    PASSWORD_CREDENTIAL_TOKEN((short)2, "passwordCredentialToken"),
+    TENANT_ADMIN_PWDCREDS_TOKEN((short)2, "tenantAdminPWDCredsToken"),
     CREATED_DATE((short)3, "createdDate"),
     EMAIL((short)4, "email"),
     FIRST_NAME((short)5, "firstName"),
@@ -118,8 +118,8 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
       switch(fieldId) {
         case 1: // ACTIVE
           return ACTIVE;
-        case 2: // PASSWORD_CREDENTIAL_TOKEN
-          return PASSWORD_CREDENTIAL_TOKEN;
+        case 2: // TENANT_ADMIN_PWDCREDS_TOKEN
+          return TENANT_ADMIN_PWDCREDS_TOKEN;
         case 3: // CREATED_DATE
           return CREATED_DATE;
         case 4: // EMAIL
@@ -187,7 +187,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.ACTIVE, new org.apache.thrift.meta_data.FieldMetaData("active", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
-    tmpMap.put(_Fields.PASSWORD_CREDENTIAL_TOKEN, new org.apache.thrift.meta_data.FieldMetaData("passwordCredentialToken", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+    tmpMap.put(_Fields.TENANT_ADMIN_PWDCREDS_TOKEN, new org.apache.thrift.meta_data.FieldMetaData("tenantAdminPWDCredsToken", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.CREATED_DATE, new org.apache.thrift.meta_data.FieldMetaData("createdDate", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
@@ -216,7 +216,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
 
   public TenantInfoBean(
     boolean active,
-    String passwordCredentialToken,
+    String tenantAdminPWDCredsToken,
     String createdDate,
     String email,
     String firstName,
@@ -227,7 +227,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     this();
     this.active = active;
     setActiveIsSet(true);
-    this.passwordCredentialToken = passwordCredentialToken;
+    this.tenantAdminPWDCredsToken = tenantAdminPWDCredsToken;
     this.createdDate = createdDate;
     this.email = email;
     this.firstName = firstName;
@@ -243,8 +243,8 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
   public TenantInfoBean(TenantInfoBean other) {
     __isset_bitfield = other.__isset_bitfield;
     this.active = other.active;
-    if (other.isSetPasswordCredentialToken()) {
-      this.passwordCredentialToken = other.passwordCredentialToken;
+    if (other.isSetTenantAdminPWDCredsToken()) {
+      this.tenantAdminPWDCredsToken = other.tenantAdminPWDCredsToken;
     }
     if (other.isSetCreatedDate()) {
       this.createdDate = other.createdDate;
@@ -281,7 +281,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
   public void clear() {
     setActiveIsSet(false);
     this.active = false;
-    this.passwordCredentialToken = null;
+    this.tenantAdminPWDCredsToken = null;
     this.createdDate = null;
     this.email = null;
     this.firstName = null;
@@ -316,26 +316,26 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __ACTIVE_ISSET_ID, value);
   }
 
-  public String getPasswordCredentialToken() {
-    return this.passwordCredentialToken;
+  public String getTenantAdminPWDCredsToken() {
+    return this.tenantAdminPWDCredsToken;
   }
 
-  public void setPasswordCredentialToken(String passwordCredentialToken) {
-    this.passwordCredentialToken = passwordCredentialToken;
+  public void setTenantAdminPWDCredsToken(String tenantAdminPWDCredsToken) {
+    this.tenantAdminPWDCredsToken = tenantAdminPWDCredsToken;
   }
 
-  public void unsetPasswordCredentialToken() {
-    this.passwordCredentialToken = null;
+  public void unsetTenantAdminPWDCredsToken() {
+    this.tenantAdminPWDCredsToken = null;
   }
 
-  /** Returns true if field passwordCredentialToken is set (has been assigned a value) and false otherwise */
-  public boolean isSetPasswordCredentialToken() {
-    return this.passwordCredentialToken != null;
+  /** Returns true if field tenantAdminPWDCredsToken is set (has been assigned a value) and false otherwise */
+  public boolean isSetTenantAdminPWDCredsToken() {
+    return this.tenantAdminPWDCredsToken != null;
   }
 
-  public void setPasswordCredentialTokenIsSet(boolean value) {
+  public void setTenantAdminPWDCredsTokenIsSet(boolean value) {
     if (!value) {
-      this.passwordCredentialToken = null;
+      this.tenantAdminPWDCredsToken = null;
     }
   }
 
@@ -563,11 +563,11 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
       }
       break;
 
-    case PASSWORD_CREDENTIAL_TOKEN:
+    case TENANT_ADMIN_PWDCREDS_TOKEN:
       if (value == null) {
-        unsetPasswordCredentialToken();
+        unsetTenantAdminPWDCredsToken();
       } else {
-        setPasswordCredentialToken((String)value);
+        setTenantAdminPWDCredsToken((String)value);
       }
       break;
 
@@ -651,8 +651,8 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     case ACTIVE:
       return isActive();
 
-    case PASSWORD_CREDENTIAL_TOKEN:
-      return getPasswordCredentialToken();
+    case TENANT_ADMIN_PWDCREDS_TOKEN:
+      return getTenantAdminPWDCredsToken();
 
     case CREATED_DATE:
       return getCreatedDate();
@@ -694,8 +694,8 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     switch (field) {
     case ACTIVE:
       return isSetActive();
-    case PASSWORD_CREDENTIAL_TOKEN:
-      return isSetPasswordCredentialToken();
+    case TENANT_ADMIN_PWDCREDS_TOKEN:
+      return isSetTenantAdminPWDCredsToken();
     case CREATED_DATE:
       return isSetCreatedDate();
     case EMAIL:
@@ -740,12 +740,12 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
         return false;
     }
 
-    boolean this_present_passwordCredentialToken = true && this.isSetPasswordCredentialToken();
-    boolean that_present_passwordCredentialToken = true && that.isSetPasswordCredentialToken();
-    if (this_present_passwordCredentialToken || that_present_passwordCredentialToken) {
-      if (!(this_present_passwordCredentialToken && that_present_passwordCredentialToken))
+    boolean this_present_tenantAdminPWDCredsToken = true && this.isSetTenantAdminPWDCredsToken();
+    boolean that_present_tenantAdminPWDCredsToken = true && that.isSetTenantAdminPWDCredsToken();
+    if (this_present_tenantAdminPWDCredsToken || that_present_tenantAdminPWDCredsToken) {
+      if (!(this_present_tenantAdminPWDCredsToken && that_present_tenantAdminPWDCredsToken))
         return false;
-      if (!this.passwordCredentialToken.equals(that.passwordCredentialToken))
+      if (!this.tenantAdminPWDCredsToken.equals(that.tenantAdminPWDCredsToken))
         return false;
     }
 
@@ -842,10 +842,10 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     if (present_active)
       list.add(active);
 
-    boolean present_passwordCredentialToken = true && (isSetPasswordCredentialToken());
-    list.add(present_passwordCredentialToken);
-    if (present_passwordCredentialToken)
-      list.add(passwordCredentialToken);
+    boolean present_tenantAdminPWDCredsToken = true && (isSetTenantAdminPWDCredsToken());
+    list.add(present_tenantAdminPWDCredsToken);
+    if (present_tenantAdminPWDCredsToken)
+      list.add(tenantAdminPWDCredsToken);
 
     boolean present_createdDate = true && (isSetCreatedDate());
     list.add(present_createdDate);
@@ -913,12 +913,12 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetPasswordCredentialToken()).compareTo(other.isSetPasswordCredentialToken());
+    lastComparison = Boolean.valueOf(isSetTenantAdminPWDCredsToken()).compareTo(other.isSetTenantAdminPWDCredsToken());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetPasswordCredentialToken()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.passwordCredentialToken, other.passwordCredentialToken);
+    if (isSetTenantAdminPWDCredsToken()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tenantAdminPWDCredsToken, other.tenantAdminPWDCredsToken);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -1037,11 +1037,11 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     sb.append(this.active);
     first = false;
     if (!first) sb.append(", ");
-    sb.append("passwordCredentialToken:");
-    if (this.passwordCredentialToken == null) {
+    sb.append("tenantAdminPWDCredsToken:");
+    if (this.tenantAdminPWDCredsToken == null) {
       sb.append("null");
     } else {
-      sb.append(this.passwordCredentialToken);
+      sb.append(this.tenantAdminPWDCredsToken);
     }
     first = false;
     if (!first) sb.append(", ");
@@ -1128,8 +1128,8 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
       throw new org.apache.thrift.protocol.TProtocolException("Required field 'active' is unset! Struct:" + toString());
     }
 
-    if (!isSetPasswordCredentialToken()) {
-      throw new org.apache.thrift.protocol.TProtocolException("Required field 'passwordCredentialToken' is unset! Struct:" + toString());
+    if (!isSetTenantAdminPWDCredsToken()) {
+      throw new org.apache.thrift.protocol.TProtocolException("Required field 'tenantAdminPWDCredsToken' is unset! Struct:" + toString());
     }
 
     if (!isSetCreatedDate()) {
@@ -1203,10 +1203,10 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 2: // PASSWORD_CREDENTIAL_TOKEN
+          case 2: // TENANT_ADMIN_PWDCREDS_TOKEN
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.passwordCredentialToken = iprot.readString();
-              struct.setPasswordCredentialTokenIsSet(true);
+              struct.tenantAdminPWDCredsToken = iprot.readString();
+              struct.setTenantAdminPWDCredsTokenIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -1299,9 +1299,9 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
       oprot.writeFieldBegin(ACTIVE_FIELD_DESC);
       oprot.writeBool(struct.active);
       oprot.writeFieldEnd();
-      if (struct.passwordCredentialToken != null) {
-        oprot.writeFieldBegin(PASSWORD_CREDENTIAL_TOKEN_FIELD_DESC);
-        oprot.writeString(struct.passwordCredentialToken);
+      if (struct.tenantAdminPWDCredsToken != null) {
+        oprot.writeFieldBegin(TENANT_ADMIN_PWDCREDS_TOKEN_FIELD_DESC);
+        oprot.writeString(struct.tenantAdminPWDCredsToken);
         oprot.writeFieldEnd();
       }
       if (struct.createdDate != null) {
@@ -1371,7 +1371,7 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
     public void write(org.apache.thrift.protocol.TProtocol prot, TenantInfoBean struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
       oprot.writeBool(struct.active);
-      oprot.writeString(struct.passwordCredentialToken);
+      oprot.writeString(struct.tenantAdminPWDCredsToken);
       oprot.writeString(struct.createdDate);
       oprot.writeString(struct.email);
       oprot.writeString(struct.firstName);
@@ -1405,8 +1405,8 @@ public class TenantInfoBean implements org.apache.thrift.TBase<TenantInfoBean, T
       TTupleProtocol iprot = (TTupleProtocol) prot;
       struct.active = iprot.readBool();
       struct.setActiveIsSet(true);
-      struct.passwordCredentialToken = iprot.readString();
-      struct.setPasswordCredentialTokenIsSet(true);
+      struct.tenantAdminPWDCredsToken = iprot.readString();
+      struct.setTenantAdminPWDCredsTokenIsSet(true);
       struct.createdDate = iprot.readString();
       struct.setCreatedDateIsSet(true);
       struct.email = iprot.readString();

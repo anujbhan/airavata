@@ -74,7 +74,7 @@ enum TenantUsagePlan{
 
 struct TenantInfoBean{
     1: required bool active;
-    2: required string passwordCredentialToken;
+    2: required string tenantAdminPWDCredsToken;
     3: required string createdDate;
     4: required string email;
     5: required string firstName;
@@ -97,7 +97,8 @@ struct ServiceProvider{
     1: optional i32 applicationId;
     2: required string applicationName;
     3: required string description;
-    4: optional OAuthApplicationData OAuthConfig;
+    4: required string tenantAdminPWDCredsToken;
+    5: optional OAuthApplicationData OAuthConfig;
 }
 
 struct OAuthApplicationData{

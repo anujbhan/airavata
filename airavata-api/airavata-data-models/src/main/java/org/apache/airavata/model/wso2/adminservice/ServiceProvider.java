@@ -58,7 +58,8 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
   private static final org.apache.thrift.protocol.TField APPLICATION_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("applicationId", org.apache.thrift.protocol.TType.I32, (short)1);
   private static final org.apache.thrift.protocol.TField APPLICATION_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("applicationName", org.apache.thrift.protocol.TType.STRING, (short)2);
   private static final org.apache.thrift.protocol.TField DESCRIPTION_FIELD_DESC = new org.apache.thrift.protocol.TField("description", org.apache.thrift.protocol.TType.STRING, (short)3);
-  private static final org.apache.thrift.protocol.TField OAUTH_CONFIG_FIELD_DESC = new org.apache.thrift.protocol.TField("OAuthConfig", org.apache.thrift.protocol.TType.STRUCT, (short)4);
+  private static final org.apache.thrift.protocol.TField TENANT_ADMIN_PWDCREDS_TOKEN_FIELD_DESC = new org.apache.thrift.protocol.TField("tenantAdminPWDCredsToken", org.apache.thrift.protocol.TType.STRING, (short)4);
+  private static final org.apache.thrift.protocol.TField OAUTH_CONFIG_FIELD_DESC = new org.apache.thrift.protocol.TField("OAuthConfig", org.apache.thrift.protocol.TType.STRUCT, (short)5);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -69,6 +70,7 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
   private int applicationId; // optional
   private String applicationName; // required
   private String description; // required
+  private String tenantAdminPWDCredsToken; // required
   private OAuthApplicationData OAuthConfig; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
@@ -76,7 +78,8 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
     APPLICATION_ID((short)1, "applicationId"),
     APPLICATION_NAME((short)2, "applicationName"),
     DESCRIPTION((short)3, "description"),
-    OAUTH_CONFIG((short)4, "OAuthConfig");
+    TENANT_ADMIN_PWDCREDS_TOKEN((short)4, "tenantAdminPWDCredsToken"),
+    OAUTH_CONFIG((short)5, "OAuthConfig");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -97,7 +100,9 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
           return APPLICATION_NAME;
         case 3: // DESCRIPTION
           return DESCRIPTION;
-        case 4: // OAUTH_CONFIG
+        case 4: // TENANT_ADMIN_PWDCREDS_TOKEN
+          return TENANT_ADMIN_PWDCREDS_TOKEN;
+        case 5: // OAUTH_CONFIG
           return OAUTH_CONFIG;
         default:
           return null;
@@ -151,6 +156,8 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.DESCRIPTION, new org.apache.thrift.meta_data.FieldMetaData("description", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.TENANT_ADMIN_PWDCREDS_TOKEN, new org.apache.thrift.meta_data.FieldMetaData("tenantAdminPWDCredsToken", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.OAUTH_CONFIG, new org.apache.thrift.meta_data.FieldMetaData("OAuthConfig", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT        , "OAuthApplicationData")));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -162,11 +169,13 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
 
   public ServiceProvider(
     String applicationName,
-    String description)
+    String description,
+    String tenantAdminPWDCredsToken)
   {
     this();
     this.applicationName = applicationName;
     this.description = description;
+    this.tenantAdminPWDCredsToken = tenantAdminPWDCredsToken;
   }
 
   /**
@@ -180,6 +189,9 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
     }
     if (other.isSetDescription()) {
       this.description = other.description;
+    }
+    if (other.isSetTenantAdminPWDCredsToken()) {
+      this.tenantAdminPWDCredsToken = other.tenantAdminPWDCredsToken;
     }
     if (other.isSetOAuthConfig()) {
       this.OAuthConfig = other.OAuthConfig;
@@ -196,6 +208,7 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
     this.applicationId = 0;
     this.applicationName = null;
     this.description = null;
+    this.tenantAdminPWDCredsToken = null;
     this.OAuthConfig = null;
   }
 
@@ -267,6 +280,29 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
     }
   }
 
+  public String getTenantAdminPWDCredsToken() {
+    return this.tenantAdminPWDCredsToken;
+  }
+
+  public void setTenantAdminPWDCredsToken(String tenantAdminPWDCredsToken) {
+    this.tenantAdminPWDCredsToken = tenantAdminPWDCredsToken;
+  }
+
+  public void unsetTenantAdminPWDCredsToken() {
+    this.tenantAdminPWDCredsToken = null;
+  }
+
+  /** Returns true if field tenantAdminPWDCredsToken is set (has been assigned a value) and false otherwise */
+  public boolean isSetTenantAdminPWDCredsToken() {
+    return this.tenantAdminPWDCredsToken != null;
+  }
+
+  public void setTenantAdminPWDCredsTokenIsSet(boolean value) {
+    if (!value) {
+      this.tenantAdminPWDCredsToken = null;
+    }
+  }
+
   public OAuthApplicationData getOAuthConfig() {
     return this.OAuthConfig;
   }
@@ -316,6 +352,14 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
       }
       break;
 
+    case TENANT_ADMIN_PWDCREDS_TOKEN:
+      if (value == null) {
+        unsetTenantAdminPWDCredsToken();
+      } else {
+        setTenantAdminPWDCredsToken((String)value);
+      }
+      break;
+
     case OAUTH_CONFIG:
       if (value == null) {
         unsetOAuthConfig();
@@ -338,6 +382,9 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
     case DESCRIPTION:
       return getDescription();
 
+    case TENANT_ADMIN_PWDCREDS_TOKEN:
+      return getTenantAdminPWDCredsToken();
+
     case OAUTH_CONFIG:
       return getOAuthConfig();
 
@@ -358,6 +405,8 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
       return isSetApplicationName();
     case DESCRIPTION:
       return isSetDescription();
+    case TENANT_ADMIN_PWDCREDS_TOKEN:
+      return isSetTenantAdminPWDCredsToken();
     case OAUTH_CONFIG:
       return isSetOAuthConfig();
     }
@@ -404,6 +453,15 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
         return false;
     }
 
+    boolean this_present_tenantAdminPWDCredsToken = true && this.isSetTenantAdminPWDCredsToken();
+    boolean that_present_tenantAdminPWDCredsToken = true && that.isSetTenantAdminPWDCredsToken();
+    if (this_present_tenantAdminPWDCredsToken || that_present_tenantAdminPWDCredsToken) {
+      if (!(this_present_tenantAdminPWDCredsToken && that_present_tenantAdminPWDCredsToken))
+        return false;
+      if (!this.tenantAdminPWDCredsToken.equals(that.tenantAdminPWDCredsToken))
+        return false;
+    }
+
     boolean this_present_OAuthConfig = true && this.isSetOAuthConfig();
     boolean that_present_OAuthConfig = true && that.isSetOAuthConfig();
     if (this_present_OAuthConfig || that_present_OAuthConfig) {
@@ -434,6 +492,11 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
     list.add(present_description);
     if (present_description)
       list.add(description);
+
+    boolean present_tenantAdminPWDCredsToken = true && (isSetTenantAdminPWDCredsToken());
+    list.add(present_tenantAdminPWDCredsToken);
+    if (present_tenantAdminPWDCredsToken)
+      list.add(tenantAdminPWDCredsToken);
 
     boolean present_OAuthConfig = true && (isSetOAuthConfig());
     list.add(present_OAuthConfig);
@@ -477,6 +540,16 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
     }
     if (isSetDescription()) {
       lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.description, other.description);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetTenantAdminPWDCredsToken()).compareTo(other.isSetTenantAdminPWDCredsToken());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetTenantAdminPWDCredsToken()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tenantAdminPWDCredsToken, other.tenantAdminPWDCredsToken);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -532,6 +605,14 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
       sb.append(this.description);
     }
     first = false;
+    if (!first) sb.append(", ");
+    sb.append("tenantAdminPWDCredsToken:");
+    if (this.tenantAdminPWDCredsToken == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.tenantAdminPWDCredsToken);
+    }
+    first = false;
     if (isSetOAuthConfig()) {
       if (!first) sb.append(", ");
       sb.append("OAuthConfig:");
@@ -554,6 +635,10 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
 
     if (!isSetDescription()) {
       throw new org.apache.thrift.protocol.TProtocolException("Required field 'description' is unset! Struct:" + toString());
+    }
+
+    if (!isSetTenantAdminPWDCredsToken()) {
+      throw new org.apache.thrift.protocol.TProtocolException("Required field 'tenantAdminPWDCredsToken' is unset! Struct:" + toString());
     }
 
     // check for sub-struct validity
@@ -619,7 +704,15 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 4: // OAUTH_CONFIG
+          case 4: // TENANT_ADMIN_PWDCREDS_TOKEN
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.tenantAdminPWDCredsToken = iprot.readString();
+              struct.setTenantAdminPWDCredsTokenIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 5: // OAUTH_CONFIG
             if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
               struct.OAuthConfig = new OAuthApplicationData();
               struct.OAuthConfig.read(iprot);
@@ -656,6 +749,11 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
         oprot.writeString(struct.description);
         oprot.writeFieldEnd();
       }
+      if (struct.tenantAdminPWDCredsToken != null) {
+        oprot.writeFieldBegin(TENANT_ADMIN_PWDCREDS_TOKEN_FIELD_DESC);
+        oprot.writeString(struct.tenantAdminPWDCredsToken);
+        oprot.writeFieldEnd();
+      }
       if (struct.OAuthConfig != null) {
         if (struct.isSetOAuthConfig()) {
           oprot.writeFieldBegin(OAUTH_CONFIG_FIELD_DESC);
@@ -682,6 +780,7 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
       TTupleProtocol oprot = (TTupleProtocol) prot;
       oprot.writeString(struct.applicationName);
       oprot.writeString(struct.description);
+      oprot.writeString(struct.tenantAdminPWDCredsToken);
       BitSet optionals = new BitSet();
       if (struct.isSetApplicationId()) {
         optionals.set(0);
@@ -705,6 +804,8 @@ public class ServiceProvider implements org.apache.thrift.TBase<ServiceProvider,
       struct.setApplicationNameIsSet(true);
       struct.description = iprot.readString();
       struct.setDescriptionIsSet(true);
+      struct.tenantAdminPWDCredsToken = iprot.readString();
+      struct.setTenantAdminPWDCredsTokenIsSet(true);
       BitSet incoming = iprot.readBitSet(2);
       if (incoming.get(0)) {
         struct.applicationId = iprot.readI32();
