@@ -86,92 +86,110 @@ struct TenantInfoBean{
     11: optional TenantUsagePlan usagePlan;
 }
 
-
-
-enum IdentityProviderUserStoreOptions{
-    PRIMARY
-}
-
-struct IdentityProviderProvisioningInfo{
-    1: required bool provisioningEnabled;
-    2: required IdentityProviderUserStoreOptions userStore;
-}
-
-/* Claim configuration information :
-*           Not all features are supported yet, only Basic Claim Configuration can be set up.
-*/
-struct IdpClaims{
-    1: required string claimId;
-    2: required string claimUri;
-}
-
-struct ClaimConfiguration{
-    1: required bool localClaimDialect;
-    2: optional List<IdpClaims> claimList;
-    3: optional string roleClaimURI;
-    4: optional string userClaimURI;
-}
-
-
-/* Role Configuration Information :
-*           Not all features are implemented, only simple mapping can be set up, which is suffiecient in most cases.
-*/
-struct RoleMapping{
-    1: required string localRoleName;
-    2: required string remoteRoleName;
-}
-
-struct RoleConfiguration{
-    1: required string IdpRole;
-    2: required RoleMapping mapping;
-}
-
-/* Federated Auth Configuration :
-*       Only OAuth2/OpenID connect is supported.
-* */
-
-enum FederatedAuthPropertyKeyName{
-    ClientId,
-    OAuth2AuthzUrl,
-    OAUTH2TokenUrl,
-    ClientSecret,
-    IsUserIdInClaims,
-    commonAuthQueryParams
-}
-
-struct FederatedAuthProperties{
-    1: optional bool confidential; // only required when providing Client secret, value 'true'
-    2: required string name;
-    3: required string value;
-}
-
-struct FederatedAuthenticatorConfigs{
-    1: required string displayName;
-    2: required bool enabled;
-    3: required string name;
-    // The list should have, clientId, Oauth2 AuthzUrl, Token Url, secret etc.
-    4: optional List<FederatedAuthProperties> propertyList;
-}
-
-struct IdentityProvider{
-    1: required string alias;
-    2: optional string certificate; // Base64Encode of public certificate
-    3: required string displayName;
-    4: required bool enable;
-    5: required bool federationhub;
-    6: optional string homeRealmId;
-    7: required string identityProviderDescription;
-    8: required string identityProviderName; // unique name required
-    // Provisioning
-    9: optional IdentityProviderProvisioningInfo provisioningInfo;
-    // Claim Configuration
-    10: optional ClaimConfiguration claimConfig;
-    // Role Configuration
-    11: optional RoleConfiguration roleConfig;
-    // Federated Auth configuration
-    12: optional FederatedAuthenticatorConfigs authConfig;
-}
+/*
+* Service provider data model :
+*           The process of creating a service in WSo 2 IS is a three step process,
+*                       1 : Create a service provider with applicationName & description
+*                       2 : Create a OAuthApplication binding
+*                       3 : Update the service provider with OAuthBinding*/
 
 struct ServiceProvider{
-    1: required string 
+    1: optional i32 applicationId;
+    2: required string applicationName;
+    3: required string description;
+    4: optional OAuthApplicationData OAuthConfig;
 }
+
+struct OAuthApplicationData{
+    1: required string OAuthVersion;
+    2: required string applicationName;
+    3: required List<string> grantTypes;
+}
+
+/* Below are the data types we will require when,
+ * custom Oauth provider support is enabled, currently only default (WSo 2 IS) is supported
+*/
+
+//enum IdentityProviderUserStoreOptions{
+//    PRIMARY
+//}
+//
+//struct IdentityProviderProvisioningInfo{
+//    1: required bool provisioningEnabled;
+//    2: required IdentityProviderUserStoreOptions userStore;
+//}
+//
+///* Claim configuration information :
+//*           Not all features are supported yet, only Basic Claim Configuration can be set up.
+//*/
+//struct IdpClaims{
+//    1: required string claimId;
+//    2: required string claimUri;
+//}
+//
+//struct ClaimConfiguration{
+//    1: required bool localClaimDialect;
+//    2: optional List<IdpClaims> claimList;
+//    3: optional string roleClaimURI;
+//    4: optional string userClaimURI;
+//}
+//
+//
+///* Role Configuration Information :
+//*           Not all features are implemented, only simple mapping can be set up, which is suffiecient in most cases.
+//*/
+//struct RoleMapping{
+//    1: required string localRoleName;
+//    2: required string remoteRoleName;
+//}
+//
+//struct RoleConfiguration{
+//    1: required string IdpRole;
+//    2: required RoleMapping mapping;
+//}
+//
+///* Federated Auth Configuration :
+//*       Only OAuth2/OpenID connect is supported.
+//* */
+//
+//enum FederatedAuthPropertyKeyName{
+//    ClientId,
+//    OAuth2AuthzUrl,
+//    OAUTH2TokenUrl,
+//    ClientSecret,
+//    IsUserIdInClaims,
+//    commonAuthQueryParams
+//}
+//
+//struct FederatedAuthProperties{
+//    1: optional bool confidential; // only required when providing Client secret, value 'true'
+//    2: required string name;
+//    3: required string value;
+//}
+//
+//struct FederatedAuthenticatorConfigs{
+//    1: required string displayName;
+//    2: required bool enabled;
+//    3: required string name;
+//    // The list should have, clientId, Oauth2 AuthzUrl, Token Url, secret etc.
+//    4: optional List<FederatedAuthProperties> propertyList;
+//}
+//
+//struct IdentityProvider{
+//    1: required string alias;
+//    2: optional string certificate; // Base64Encode of public certificate
+//    3: required string displayName;
+//    4: required bool enable;
+//    5: required bool federationhub;
+//    6: optional string homeRealmId;
+//    7: required string identityProviderDescription;
+//    8: required string identityProviderName; // unique name required
+//    // Provisioning
+//    9: optional IdentityProviderProvisioningInfo provisioningInfo;
+//    // Claim Configuration
+//    10: optional ClaimConfiguration claimConfig;
+//    // Role Configuration
+//    11: optional RoleConfiguration roleConfig;
+//    // Federated Auth configuration
+//    12: optional FederatedAuthenticatorConfigs authConfig;
+//}
