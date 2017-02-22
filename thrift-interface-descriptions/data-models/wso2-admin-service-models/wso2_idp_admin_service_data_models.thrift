@@ -103,7 +103,7 @@ struct ServiceProvider{
 struct OAuthApplicationData{
     1: required string OAuthVersion;
     2: required string applicationName;
-    3: required List<string> grantTypes;
+    3: required list<string> grantTypes;
 }
 
 /* Below are the data types we will require when,
