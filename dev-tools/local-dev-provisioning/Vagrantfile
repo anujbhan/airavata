@@ -1,0 +1,40 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+MEMORY = `sysctl -n hw.memsize`.to_i / 2048 / 2048 / 2
+CPUS = `sysctl -n hw.ncpu`.to_i
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  if ENV['VM'] == "virtualbox"
+      config.vm.box = "centos7"
+      config.vm.provider "virtualbox" do |v, override|
+        v.memory = MEMORY
+        v.cpus = CPUS
+      end
+  else
+      config.vm.box = "centos7"
+      config.vm.provider "parallels" do |v, override|
+        v.update_guest_tools = true
+        v.memory = MEMORY
+        v.cpus = CPUS
+      end
+  end
+
+
+  config.ssh.forward_agent = true
+  config.ssh.username = 'root'
+  config.ssh.password = 'vagrant'
+  config.ssh.insert_key = 'true'
+
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.force_remote_user = true
+    ansible.playbook = "airavata-local-testing.yml"
+  end
+
+  config.vm.network :forwarded_port, host: 8930, guest: 8930   #airtime container
+  config.vm.network :forwarded_port, host: 8970, guest: 8970  #airtime container
+
+end

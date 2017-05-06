@@ -25,3 +25,8 @@
   become: yes
   tags:
        - always
+
+- shell: echo _JAVA_OPTIONS is $_JAVA_OPTIONS
+  register: shellout
+  tags:
+      - local_dev

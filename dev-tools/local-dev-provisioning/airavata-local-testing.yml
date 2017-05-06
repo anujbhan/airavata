@@ -1,0 +1,10 @@
+---
+
+- name: Airavata deployment for local testing
+  hosts: all
+  environment:
+      _JAVA_OPTIONS: -Xmx512m
+  roles:
+    - { role: env_setup, tags: [ 'redhat' ] }
+    - { role: java, tags: [ 'local_dev' ] }
+    - airavata_build

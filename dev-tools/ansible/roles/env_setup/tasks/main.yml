@@ -4,10 +4,14 @@
 - name: Create a new user group "{{ group }}"
   group: name={{ group }}
   become: yes
+  tags:
+         - always
 
 - name: Create a new user "{{ user }}"
   user: name={{ user }} group={{ group }}
   become: yes
+  tags:
+         - always
 
 - name: Install Firewalld (RedHat)
   yum: name=firewalld state=latest update_cache=yes
@@ -32,5 +36,11 @@
 - name: Start firewalld service
   service: name=firewalld state=started
   become: yes
+  tags:
+         - always
+
+- include: redhat.yml
+
+- include: debian.yml
 
 ...

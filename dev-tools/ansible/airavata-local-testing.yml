@@ -1,0 +1,8 @@
+---
+
+- name: Airavata deployment for local testing
+  hosts: all
+  roles:
+    - { role: env_setup, tags: [ 'debian' ] }
+    - { role: java, tags: [ 'local_dev' ] }
+    - airavata_build
